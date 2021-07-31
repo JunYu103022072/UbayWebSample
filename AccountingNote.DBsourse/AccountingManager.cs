@@ -24,29 +24,23 @@ namespace AccountingNote.DBsourse
                     FROM Accounting
                     WHERE UserID = @userID
                 ";
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            List<SqlParameter> list = new List<SqlParameter>();
+            list.Add(new SqlParameter("@userID", userID));
+
+            //要把錯誤露出來
+            try
             {
-                using (SqlCommand command = new SqlCommand(dbCommand, connection))
-                {
-                    command.Parameters.AddWithValue("@userID", userID);
-                    try
-                    {
-                        connection.Open();
-                        var reader = command.ExecuteReader();
-
-                        DataTable dt = new DataTable();         //放到DataTable
-                        dt.Load(reader);
-
-                        return dt;
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.WriteLog(ex);
-                        return null;
-                    }
-                }
+                return DBHelper.ReadDataTable(connectionString, dbCommand, list);
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog(ex);
+                return null;
             }
         }
+
+        
+
         /// <summary>查詢流水帳清單</summary>
         /// <param name="id"></param>
         /// <param name="userID"></param>

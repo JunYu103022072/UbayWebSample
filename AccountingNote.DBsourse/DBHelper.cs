@@ -18,10 +18,24 @@ namespace AccountingNote.DBsourse
             string val = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             return val;
         }
-        public static DataRow ReadDataRow(string connect,string command,List<SqlParameter> list)
-        {
 
-            return null;
+        public static DataTable ReadDataTable(string connectionString, string dbCommand, List<SqlParameter> list)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                using (SqlCommand command = new SqlCommand(dbCommand, connection))
+                {
+                    command.Parameters.AddRange(list.ToArray());
+
+                    connection.Open();
+                    var reader = command.ExecuteReader();
+
+                    DataTable dt = new DataTable();         //放到DataTable
+                    dt.Load(reader);
+
+                    return dt;
+                }
+            }
         }
         public static int MotifyData(string ConnStr,string dbCommand, List<SqlParameter> paramList)
         {
