@@ -11,15 +11,15 @@ namespace AccountingNote.DBsourse
 {
     public class UserInfoManager
     {
-        public static string GetConnectionString()
-        {   
-            //Configuration 使用特定資源或應用程式 且不能繼承 ex : Application
-            string val = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            return val;
-        }
+        //public static string GetConnectionString()
+        //{   
+        //    //Configuration 使用特定資源或應用程式 且不能繼承 ex : Application
+        //    string val = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        //    return val;
+        //}
         public static DataRow GetUserInfoByAccount(string account)
         {
-            string connectionString = GetConnectionString();
+            string connectionString = DBHelper.GetConnectionString();
             string dbCommandString =
                 @" SELECT [ID], [Account], [PWD], [Name], [Email] 
                     FROM UserInfo 
