@@ -59,33 +59,23 @@ namespace AccountingNote.DBsourse
                     FROM Accounting
                     WHERE ID = @id AND UserID = @userID
                 ";
-            using (SqlConnection connection = new SqlConnection(connectionString))
+
+            List<SqlParameter> list = new List<SqlParameter>();
+            list.Add(new SqlParameter("@id", id));
+            list.Add(new SqlParameter("@userID", userID));
+            try
             {
-                using (SqlCommand command = new SqlCommand(dbCommand, connection))
-                {
-                    command.Parameters.AddWithValue("@id", id);
-                    command.Parameters.AddWithValue("@userID", userID);
-                    try
-                    {
-                        connection.Open();
-                        var reader = command.ExecuteReader();
-
-                        DataTable dt = new DataTable();         //放到DataTable
-                        dt.Load(reader);
-
-                        if (dt.Rows.Count == 0)
-                            return null;
-
-                        return dt.Rows[0];
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.WriteLog(ex);
-                        return null;
-                    }
-                }
+                return DBHelper.ReadDataRow(connectionString, dbCommand, list);
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog(ex);
+                return null;
             }
         }
+
+
+
         /// <summary>更改流水帳</summary>
         /// <param name="ID"></param>
         /// <param name="userID"></param>

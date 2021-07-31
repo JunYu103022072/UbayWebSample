@@ -37,6 +37,29 @@ namespace AccountingNote.DBsourse
                 }
             }
         }
+        public static DataRow ReadDataRow(string connectionString, string dbCommand, List<SqlParameter> list)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                using (SqlCommand command = new SqlCommand(dbCommand, connection))
+                {
+                    command.Parameters.AddRange(list.ToArray());
+
+                    connection.Open();
+                    var reader = command.ExecuteReader();
+
+                    DataTable dt = new DataTable();         //放到DataTable
+                    dt.Load(reader);
+
+                    if (dt.Rows.Count == 0)
+                        return null;
+
+                    return dt.Rows[0];
+
+                }
+            }
+        }
+
         public static int MotifyData(string ConnStr,string dbCommand, List<SqlParameter> paramList)
         {
             using (SqlConnection connection = new SqlConnection(ConnStr))
