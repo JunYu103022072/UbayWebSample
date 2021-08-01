@@ -59,19 +59,19 @@ namespace AccountingNote.DBsourse
                 }
             }
         }
-
-        public static int MotifyData(string ConnStr,string dbCommand, List<SqlParameter> paramList)
+        public static void ModifyData(List<SqlParameter> paramlist, string connectionString, string dbCommand)
         {
-            using (SqlConnection connection = new SqlConnection(ConnStr))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 using (SqlCommand command = new SqlCommand(dbCommand, connection))
                 {
-                    command.Parameters.AddRange(paramList.ToArray());
+                    command.Parameters.AddRange(paramlist.ToArray());
                     connection.Open();
-                    int effetcRowsCount = command.ExecuteNonQuery();
-                    return effetcRowsCount;
+                    command.ExecuteNonQuery();
                 }
             }
         }
+
+
     }
 }

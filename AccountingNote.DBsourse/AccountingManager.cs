@@ -39,13 +39,13 @@ namespace AccountingNote.DBsourse
             }
         }
 
-        
+
 
         /// <summary>查詢流水帳清單</summary>
         /// <param name="id"></param>
         /// <param name="userID"></param>
         /// 一次查詢兩個值比較不容易讓人窺探資料
-        public static DataRow GetAccounting(int id,string userID)
+        public static DataRow GetAccounting(int id, string userID)
         {
             string connectionString = DBHelper.GetConnectionString();
             string dbCommand =
@@ -138,27 +138,24 @@ namespace AccountingNote.DBsourse
         /// <param name="ID"></param>
         public static void DeleteAccounting(int ID)
         {
+            List<SqlParameter> paramlist = new List<SqlParameter>();
+            paramlist.Add(new SqlParameter("@id", ID));
             string connectionString = DBHelper.GetConnectionString();
             string dbCommand =
                 $@" DELETE  [Accounting]
                     WHERE ID = @id ";
-            using (SqlConnection connection = new SqlConnection(connectionString))
+
+            try
             {
-                using (SqlCommand command = new SqlCommand(dbCommand, connection))
-                {
-                    command.Parameters.AddWithValue("@id", ID);
-                    try
-                    {
-                        connection.Open();
-                        command.ExecuteNonQuery();
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.WriteLog(ex);
-                    }
-                }
+                DBHelper.ModifyData(paramlist, connectionString, dbCommand);
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog(ex);
             }
         }
+
+
 
         /// <summary>建立流水帳</summary>
         /// <param name="userID"></param>
