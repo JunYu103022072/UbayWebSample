@@ -28,7 +28,7 @@ namespace AccountingNote.SystemAdmin
                 //帳號不存在轉登入頁
                 if (currentUser == null)                      
                 {
-                    this.Session["UserLoginInfo"] = null;
+                    Response.Redirect("/Login.aspx");
                     return;
                 }
 
@@ -40,7 +40,7 @@ namespace AccountingNote.SystemAdmin
 
         protected void btnLogout_Click(object sender, EventArgs e)
         {
-            this.Session["UserLoginInfo"] = null;             // 清除登入資訊
+            AuthManager.Logout();            // 清除登入資訊
             Response.Redirect("/Login.aspx");
         }
     }

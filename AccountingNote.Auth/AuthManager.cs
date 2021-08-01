@@ -21,7 +21,8 @@ namespace AccountingNote.Auth
             else
                 return true;
         }
-        //取得使用者資訊
+        /// <summary>取得已登入使用者資訊（沒登入就回傳null)</summary>
+        /// <returns></returns>
         public static UserInfoModel GetCurrentUser()
         {
             string account = HttpContext.Current.Session["UserLoginInfo"] as string;
@@ -32,7 +33,10 @@ namespace AccountingNote.Auth
             DataRow dr = UserInfoManager.GetUserInfoByAccount(account);
 
             if (dr == null)
+            {
+                HttpContext.Current.Session["UserLoginInfo"] = null;
                 return null;
+            }
 
             UserInfoModel model = new UserInfoModel();
             model.ID = dr["ID"].ToString();
@@ -40,6 +44,12 @@ namespace AccountingNote.Auth
             model.Name = dr["Name"].ToString();
             model.Email = dr["Email"].ToString();
             return model;
+        }
+
+        /// <summary>清除登入 (登出)</summary>
+        public static void Logout()
+        {
+            HttpContext.Current.Session["UserLoginInfo"] = null;
         }
     }
 }
