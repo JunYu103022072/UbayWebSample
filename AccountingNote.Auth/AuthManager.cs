@@ -51,5 +51,41 @@ namespace AccountingNote.Auth
         {
             HttpContext.Current.Session["UserLoginInfo"] = null;
         }
+        /// <summary>嘗試登入</summary>
+        /// <param name="account"></param>
+        /// <param name="PWD"></param>
+        /// <param name="errorMsg"></param>
+        /// <returns></returns>
+        public static bool TryLogin(string account, string PWD, out string errorMsg)
+        {
+            //check empty
+            if (string.IsNullOrEmpty(account) || string.IsNullOrEmpty(PWD))
+            {
+                errorMsg = "Required the Account / PWD";
+                return false;
+            }
+            var dr = UserInfoManager.GetUserInfoByAccount(account);
+            //check null
+            if (dr == null)
+            {
+                errorMsg = $"This Account : {account} doesn't exists";
+                return false;
+            }
+            //check Account / Pwd
+            //Compare 比對大小寫 , true = 大小寫不干擾 false = 大小寫字串需一致
+            if (string.Compare(dr["Account"].ToString(), account, true) == 0 && string.Compare(dr["PWD"].ToString(), PWD, false) == 0)
+            {
+                //進入使用者畫面
+                HttpContext.Current.Session["UserLoginInfo"] = dr["Account"].ToString();
+
+                errorMsg = string.Empty;
+                return true;
+            }
+            else
+            {
+                errorMsg = "Login Fail ! Please check your Account / Password";
+                return false;
+            }
+        }
     }
 }

@@ -7,6 +7,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data.SqlClient;
 using System.Data;
+using AccountingNote.Auth;
 
 namespace AccountingNote
 {
@@ -32,37 +33,16 @@ namespace AccountingNote
             //inp = 輸入值
             string inp_Account = this.txtAccount.Text;
             string inp_PWD = this.txtPassword.Text;
+            string errorMsg;
 
-            //check empty
-            if(string.IsNullOrEmpty(inp_Account) || string.IsNullOrEmpty(inp_PWD))
+            if(!AuthManager.TryLogin(inp_Account, inp_PWD, out errorMsg))
             {
-                this.ltlMessage.Text = "Required the Account / PWD";
+                this.ltlMessage.Text = errorMsg;
                 return;
             }
 
-            var dr = UserInfoManager.GetUserInfoByAccount(inp_Account);
-
-            //check null
-            if (dr == null)
-            {
-                this.ltlMessage.Text = "This Account doesn't exists";
-                return;
-            }
-            //check Account / Pwd
-            //Compare 比對大小寫 , true = 大小寫不干擾 false = 大小寫字串需一致
-            if (string.Compare(dr["Account"].ToString(), inp_Account, true) == 0 && string.Compare(dr["PWD"].ToString(), inp_PWD, false) == 0)
-            {
-                //進入使用者畫面
-                this.Session["UserLoginInfo"] = dr["Account"].ToString();
-                Response.Redirect("/SystemAdmin/UserInfo.aspx");
-            }
-            else
-            {
-                this.ltlMessage.Text = "Login Fail ! Please check your Account / Password";
-                return;
-            }
-
-
+            Response.Redirect("/SystemAdmin/UserInfo.aspx");
+           
         }
     }
 }
