@@ -21,5 +21,25 @@ namespace AccountingNote.Auth
             else
                 return true;
         }
+        //取得使用者資訊
+        public static UserInfoModel GetCurrentUser()
+        {
+            string account = HttpContext.Current.Session["UserLoginInfo"] as string;
+            if (account == null)
+            return null;
+
+            //有值的狀況下存使用者資訊回傳
+            DataRow dr = UserInfoManager.GetUserInfoByAccount(account);
+
+            if (dr == null)
+                return null;
+
+            UserInfoModel model = new UserInfoModel();
+            model.ID = dr["ID"].ToString();
+            model.Account = dr["Account"].ToString();
+            model.Name = dr["Name"].ToString();
+            model.Email = dr["Email"].ToString();
+            return model;
+        }
     }
 }

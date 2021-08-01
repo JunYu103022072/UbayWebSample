@@ -23,18 +23,18 @@ namespace AccountingNote.SystemAdmin
                         Response.Redirect("/Login.aspx");
                         return;
                     }
-                string account = this.Session["UserLoginInfo"] as string;
-                DataRow dr = UserInfoManager.GetUserInfoByAccount(account);
 
-                if (dr == null)                              //帳號不存在
+                var currentUser = AuthManager.GetCurrentUser();
+                //帳號不存在轉登入頁
+                if (currentUser == null)                      
                 {
                     this.Session["UserLoginInfo"] = null;
-
+                    return;
                 }
 
-                this.ltlAccount.Text = dr["Account"].ToString();
-                this.ltlName.Text = dr["Name"].ToString();
-                this.ltlEmail.Text = dr["Email"].ToString();
+                this.ltlAccount.Text = currentUser.Account;
+                this.ltlName.Text = currentUser.Name;
+                this.ltlEmail.Text = currentUser.Email;
             }
         }
 

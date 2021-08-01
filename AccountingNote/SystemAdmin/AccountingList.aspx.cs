@@ -23,15 +23,15 @@ namespace AccountingNote.SystemAdmin
             }
             string account = this.Session["UserLoginInfo"] as string;
             //要傳入Accounting的資料,要知道User的ID
-            var dr = UserInfoManager.GetUserInfoByAccount(account);
-
-            if (dr == null)
+            var currentUser = AuthManager.GetCurrentUser();
+            //帳號不存在轉登入頁
+            if (currentUser == null)
             {
-                Response.Redirect("/Login.aspx");
+                this.Session["UserLoginInfo"] = null;
                 return;
             }
             //Read Accounting Data
-            var dt = AccountingManager.GetAccountingList(dr["ID"].ToString());
+            var dt = AccountingManager.GetAccountingList(currentUser.ID);
             if (dt.Rows.Count > 0)          //check is empty data
             {
                 this.plcNoData.Visible = false;

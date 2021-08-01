@@ -21,12 +21,13 @@ namespace AccountingNote.SystemAdmin
             }
             string account = this.Session["UserLoginInfo"] as string;
             //要傳入Accounting的資料,要知道User的ID
-            var drUserInfo = UserInfoManager.GetUserInfoByAccount(account);             //* id = 0  idText=null drUserInfo = System.DataRow
-
-            if (drUserInfo == null)
+            var currentUser = AuthManager.GetCurrentUser();
+            //帳號不存在轉登入頁
+            if (currentUser == null)
             {
-                Response.Redirect("/Login.aspx");
+                this.Session["UserLoginInfo"] = null;
                 return;
+
             }
             if (!this.IsPostBack)
             {
@@ -45,7 +46,7 @@ namespace AccountingNote.SystemAdmin
                     if (int.TryParse(idText, out id))
                     {
                         //多出使用者ID保護資料
-                        var drAccounting = AccountingManager.GetAccounting(id,drUserInfo["ID"].ToString());
+                        var drAccounting = AccountingManager.GetAccounting(id,currentUser.ID);
 
                         if (drAccounting == null)
                         {

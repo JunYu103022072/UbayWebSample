@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AccountingNote.Auth
 {
-    class UserInfoModel
+    public class UserInfoModel
     {
         public string ID { get; set; }
 
