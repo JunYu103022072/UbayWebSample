@@ -59,7 +59,7 @@ namespace AccountingNote.DBsourse
                 }
             }
         }
-        public static void ModifyData(List<SqlParameter> paramlist, string connectionString, string dbCommand)
+        public static int ModifyData(List<SqlParameter> paramlist, string connectionString, string dbCommand)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -67,11 +67,15 @@ namespace AccountingNote.DBsourse
                 {
                     command.Parameters.AddRange(paramlist.ToArray());
                     connection.Open();
-                    command.ExecuteNonQuery();
+                    int effectRowCount = command.ExecuteNonQuery();
+                    return effectRowCount;
                 }
             }
         }
 
-
+        internal static int ModifyData(string connectionString, string dbCommand, List<SqlParameter> paramlist)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

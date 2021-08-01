@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using AccountingNote.Auth;
 using AccountingNote.DBsourse;
 
 namespace AccountingNote.SystemAdmin
@@ -12,7 +13,8 @@ namespace AccountingNote.SystemAdmin
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (this.Session["UserLoginInfo"] == null)      //Session沒東西, 強導回登入 checkLogin
+            //還沒登入的話 導回登入頁
+            if (!AuthManager.Islogined())
             {
                 Response.Redirect("/Login.aspx");
                 return;

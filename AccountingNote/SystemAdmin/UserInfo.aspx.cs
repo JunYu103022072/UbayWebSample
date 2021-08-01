@@ -7,6 +7,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Web.UI.WebControls;
 using AccountingNote.DBsourse;
+using AccountingNote.Auth;
 
 namespace AccountingNote.SystemAdmin
 {
@@ -16,20 +17,19 @@ namespace AccountingNote.SystemAdmin
         {
             if (!this.IsPostBack)                           //可能是按鈕跳回本頁 , 所以要判斷PostBack
             {
-                //還沒登入的話 導回
-                if (this.Session["UserLoginInfo"] == null)
-                {
-                    Response.Redirect("/Login.aspx");
-                    return;
-                }
+                    //還沒登入的話 導回登入頁
+                    if (!AuthManager.Islogined())
+                    {
+                        Response.Redirect("/Login.aspx");
+                        return;
+                    }
                 string account = this.Session["UserLoginInfo"] as string;
                 DataRow dr = UserInfoManager.GetUserInfoByAccount(account);
 
                 if (dr == null)                              //帳號不存在
                 {
                     this.Session["UserLoginInfo"] = null;
-                    Response.Redirect("/Login.aspx");
-                    return;
+
                 }
 
                 this.ltlAccount.Text = dr["Account"].ToString();

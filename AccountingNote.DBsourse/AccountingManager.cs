@@ -104,34 +104,29 @@ namespace AccountingNote.DBsourse
                     WHERE
                         ID = @id
                 ";
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                using (SqlCommand command = new SqlCommand(dbCommand, connection))
-                {
-                    command.Parameters.AddWithValue("@userID", userID);
-                    command.Parameters.AddWithValue("@caption", caption);
-                    command.Parameters.AddWithValue("@amount", amount);
-                    command.Parameters.AddWithValue("@actType", actType);
-                    command.Parameters.AddWithValue("@createDate", DateTime.Now);
-                    command.Parameters.AddWithValue("@body", body);
-                    command.Parameters.AddWithValue("@id", ID);
-                    try
-                    {
-                        connection.Open();
-                        //受影響的筆數
-                        int effectRows = command.ExecuteNonQuery();
 
-                        if (effectRows == 1)
-                            return true;
-                        else
-                            return false;
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.WriteLog(ex);
-                        return false;
-                    }
-                }
+            List<SqlParameter> paramlist = new List<SqlParameter>();
+            paramlist.Add(new SqlParameter("@userID", userID));
+            paramlist.Add(new SqlParameter("@caption", caption));
+            paramlist.Add(new SqlParameter("@amount", amount));
+            paramlist.Add(new SqlParameter("@actType", actType));
+            paramlist.Add(new SqlParameter("@createDate", DateTime.Now));
+            paramlist.Add(new SqlParameter("@body", body));
+            paramlist.Add(new SqlParameter("@id", ID));
+
+            try
+            {
+                int effectRows = DBHelper.ModifyData(connectionString, dbCommand, paramlist);
+
+                if (effectRows == 1)
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog(ex);
+                return false;
             }
         }
         /// <summary>刪除流水帳</summary>
