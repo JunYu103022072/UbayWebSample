@@ -28,22 +28,91 @@ namespace AccountingNote.SystemAdmin
             if (currentUser == null)
             {
                 this.Session["UserLoginInfo"] = null;
+                Response.Redirect("/Login.aspx");
                 return;
             }
             //Read Accounting Data
             var dt = AccountingManager.GetAccountingList(currentUser.ID);
             if (dt.Rows.Count > 0)          //check is empty data
             {
-                this.plcNoData.Visible = false;
+                //var totalPages = this.GetTotalPages(dt);   //ucPager替代
+                var dtPages = this.GetPageDataTable(dt);
+
+                //this.plcNoData.Visible = false;
                 //資料繫結 
-                this.gvAccountList.DataSource = dt;
+                this.gvAccountList.DataSource = dtPages;
                 this.gvAccountList.DataBind();
+
+                this.ucPager.TotalSize = dt.Rows.Count;
+                this.ucPager.Bind();
+                //var pages = (dt.Rows.Count / 10);
+                //if (dt.Rows.Count % 10 > 0)
+                //{
+                //    pages += 1;
+                //    this.ltlPager.Text = $"共 {dt.Rows.Count} 筆, 共 {pages} 頁, 目前在第{this.GetCurrentPage()}頁 <br/>";
+
+                //    for (var i = 1; i <= totalPages; i++)
+                //    {
+                //        this.ltlPager.Text += $"<a href='AccountingList.aspx?page={i}'>{i}</a>&nbsp;";
+                //    }
+                //}
             }
             else
             {
                 this.gvAccountList.Visible = false;
                 this.plcNoData.Visible = true;
             }
+        }
+        //取頁
+        private int GetCurrentPage()
+        {
+            string pageText = Request.QueryString["Page"]; //get Pages now
+
+            if (string.IsNullOrWhiteSpace(pageText))
+                return 1;
+
+            int intPage;
+            if (!int.TryParse(pageText, out intPage))
+                return 1;
+
+            if (intPage <= 0)
+                return 1;
+
+            return intPage;
+        }
+        //取資料如何分頁
+        private DataTable GetPageDataTable(DataTable dt)
+        {
+            DataTable dtPaged = dt.Clone();
+
+            int startIndex = (this.GetCurrentPage() - 1) * 10;
+            int endIndex = (this.GetCurrentPage()) * 10;
+
+            if (endIndex > dt.Rows.Count) //筆數修正
+                endIndex = dt.Rows.Count;
+
+            for (var i = startIndex; i < endIndex; i++)
+            {
+                DataRow dr = dt.Rows[i];
+                var drNew = dtPaged.NewRow();
+
+                foreach (DataColumn dc in dt.Columns)
+                {
+                    drNew[dc.ColumnName] = dr[dc];
+                }
+                dtPaged.Rows.Add(drNew);
+            }
+            return dtPaged;
+        }
+        /// <summary>Total Pages</summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        private int GetTotalPages(DataTable dt)
+        {
+            int pages = dt.Rows.Count / 10;        // 1 -> 0  ,  12 -> 1  , 10 ->1
+            if ((dt.Rows.Count % 10) > 0)
+                pages += 1;
+            return pages;
         }
 
         protected void btnCreate_Click(object sender, EventArgs e)
@@ -55,9 +124,9 @@ namespace AccountingNote.SystemAdmin
         {
             var row = e.Row;        // = 每一列樣板實體化的內容
 
-            if(row.RowType == DataControlRowType.DataRow)
+            if (row.RowType == DataControlRowType.DataRow)
             {
-                Label lbl = row.FindControl("lblActType") as Label;     
+                Label lbl = row.FindControl("lblActType") as Label;
 
                 var dr = row.DataItem as DataRowView;
                 int actType = dr.Row.Field<int>("ActType");
@@ -67,7 +136,7 @@ namespace AccountingNote.SystemAdmin
                 }
                 else
                 {
-                    
+
                     lbl.Text = "收入";
                 }
                 if (dr.Row.Field<int>("Amount") > 1500)
@@ -76,6 +145,6 @@ namespace AccountingNote.SystemAdmin
                 }
             }
         }
-        
+
     }
 }

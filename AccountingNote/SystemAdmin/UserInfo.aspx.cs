@@ -17,16 +17,16 @@ namespace AccountingNote.SystemAdmin
         {
             if (!this.IsPostBack)                           //可能是按鈕跳回本頁 , 所以要判斷PostBack
             {
-                    //還沒登入的話 導回登入頁
-                    if (!AuthManager.Islogined())
-                    {
-                        Response.Redirect("/Login.aspx");
-                        return;
-                    }
+                //還沒登入的話 導回登入頁
+                if (!AuthManager.Islogined())
+                {
+                    Response.Redirect("/Login.aspx");
+                    return;
+                }
 
                 var currentUser = AuthManager.GetCurrentUser();
                 //帳號不存在轉登入頁
-                if (currentUser == null)                      
+                if (currentUser == null)
                 {
                     Response.Redirect("/Login.aspx");
                     return;
