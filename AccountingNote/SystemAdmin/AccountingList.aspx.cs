@@ -38,6 +38,8 @@ namespace AccountingNote.SystemAdmin
                 //var totalPages = this.GetTotalPages(dt);   //ucPager替代
                 var dtPages = this.GetPageDataTable(dt);
 
+                this.ucPager2.TotalSize = dt.Rows.Count;
+                this.ucPager2.Bind();
                 //this.plcNoData.Visible = false;
                 //資料繫結 
                 this.gvAccountList.DataSource = dtPages;

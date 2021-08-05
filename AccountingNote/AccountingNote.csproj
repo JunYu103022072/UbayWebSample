@@ -78,6 +78,7 @@
     <Content Include="ucPager1.ascx" />
     <Content Include="ucPager2.ascx" />
     <Content Include="UserControl\ucPager.ascx" />
+    <Content Include="UserControl\ucPager2.ascx" />
     <Content Include="UserList.ascx" />
     <Content Include="Web.config" />
     <Content Include="WebForm1.aspx" />
@@ -170,6 +171,13 @@
     </Compile>
     <Compile Include="UserControl\ucPager.ascx.designer.cs">
       <DependentUpon>ucPager.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControl\ucPager2.ascx.cs">
+      <DependentUpon>ucPager2.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControl\ucPager2.ascx.designer.cs">
+      <DependentUpon>ucPager2.ascx</DependentUpon>
     </Compile>
     <Compile Include="UserList.ascx.cs">
       <DependentUpon>UserList.ascx</DependentUpon>
