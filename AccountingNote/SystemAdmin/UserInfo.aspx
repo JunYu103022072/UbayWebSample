@@ -40,6 +40,18 @@
                                 <asp:Literal ID="ltlEmail" runat="server"></asp:Literal>
                             </td>
                         </tr>
+                        <tr>
+                            <th>會員等級</th>
+                            <td>
+                                <asp:Literal ID="ltlUserLevel" runat="server"></asp:Literal>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>創立時間</th>
+                            <td>
+                                <asp:Literal ID="ltlDateTime" runat="server"></asp:Literal>
+                            </td>
+                        </tr>
                     </table>
                     <asp:Button runat="server" ID="btnLogout" Text="LogOut" OnClick="btnLogout_Click" />
                 </td>

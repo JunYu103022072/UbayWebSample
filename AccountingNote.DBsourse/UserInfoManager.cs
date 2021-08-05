@@ -15,7 +15,7 @@ namespace AccountingNote.DBsourse
         {
             string connectionString = DBHelper.GetConnectionString();
             string dbCommandString =
-                @" SELECT [ID], [Account], [PWD], [Name], [Email] 
+                @" SELECT [ID], [Account], [PWD], [Name], [Email],[UserLevel],[Datetime]
                     FROM UserInfo 
                     WHERE [Account] = @account
                 ";

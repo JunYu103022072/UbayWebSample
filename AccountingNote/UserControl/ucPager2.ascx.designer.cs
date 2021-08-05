@@ -42,13 +42,13 @@ namespace AccountingNote.UserControl
         protected global::System.Web.UI.HtmlControls.HtmlAnchor aLink2;
 
         /// <summary>
-        /// aLink3 控制項。
+        /// ltlCurrentPage 控制項。
         /// </summary>
         /// <remarks>
         /// 自動產生的欄位。
         /// 若要修改，請將欄位宣告從設計工具檔案移到程式碼後置檔案。
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlAnchor aLink3;
+        protected global::System.Web.UI.WebControls.Literal ltlCurrentPage;
 
         /// <summary>
         /// aLink4 控制項。
@@ -76,5 +76,14 @@ namespace AccountingNote.UserControl
         /// 若要修改，請將欄位宣告從設計工具檔案移到程式碼後置檔案。
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlAnchor aLinkLast;
+
+        /// <summary>
+        /// ltlPager 控制項。
+        /// </summary>
+        /// <remarks>
+        /// 自動產生的欄位。
+        /// 若要修改，請將欄位宣告從設計工具檔案移到程式碼後置檔案。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal ltlPager;
     }
 }

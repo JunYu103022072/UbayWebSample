@@ -45,8 +45,6 @@ namespace AccountingNote.SystemAdmin
                 this.gvAccountList.DataSource = dtPages;
                 this.gvAccountList.DataBind();
 
-                this.ucPager.TotalSize = dt.Rows.Count;
-                this.ucPager.Bind();
                 //var pages = (dt.Rows.Count / 10);
                 //if (dt.Rows.Count % 10 > 0)
                 //{
@@ -86,9 +84,9 @@ namespace AccountingNote.SystemAdmin
         private DataTable GetPageDataTable(DataTable dt)
         {
             DataTable dtPaged = dt.Clone();
-
-            int startIndex = (this.GetCurrentPage() - 1) * 10;
-            int endIndex = (this.GetCurrentPage()) * 10;
+            int pageSize = this.ucPager2.PageSize;
+            int startIndex = (this.GetCurrentPage() - 1) * pageSize;
+            int endIndex = (this.GetCurrentPage()) * pageSize;
 
             if (endIndex > dt.Rows.Count) //筆數修正
                 endIndex = dt.Rows.Count;

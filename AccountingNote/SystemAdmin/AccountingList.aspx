@@ -1,6 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="AccountingList.aspx.cs" Inherits="AccountingNote.SystemAdmin.AccountingList" %>
 
-<%@ Register Src="~/UserControl/ucPager.ascx" TagPrefix="uc1" TagName="ucPager" %>
 <%@ Register Src="~/UserControl/ucPager2.ascx" TagPrefix="uc1" TagName="ucPager2" %>
 
 
@@ -60,10 +59,17 @@
                         <SortedDescendingCellStyle BackColor="#E9EBEF" />
                         <SortedDescendingHeaderStyle BackColor="#4870BE" />
                     </asp:GridView>
+        <%--            <tr>
+                        <th>
+                        </th>
+                        <th>
+                            小計<asp:Label runat="server" ID="lblSubTotal" Text="Label"></asp:Label>
+                        </th>
+                    </tr>--%>
                     <asp:Literal ID="ltlPager" runat="server"></asp:Literal>
-                    <uc1:ucpager runat="server" id="ucPager" PageSize="10" Url="AccountingList.aspx" CurrentPage="1" TotalSize="10"/>
+                    
                     <div style="background-color: aliceblue"  align="center">
-                        <uc1:ucPager2 runat="server" ID="ucPager2" PageSize="10" Url="/SystemAdmin/AccountingList.aspx" />
+                        <uc1:ucPager2 runat="server" ID="ucPager2" PageSize="3" Url="/SystemAdmin/AccountingList.aspx" />
                     </div>
                     <asp:PlaceHolder ID="plcNoData" runat="server" Visible="false">
                         <p style="color: red; background-color: cornflowerblue">
