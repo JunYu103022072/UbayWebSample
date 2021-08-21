@@ -6,6 +6,8 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using AccountingNote.Auth;
 using AccountingNote.DBsourse;
+using AccountingNote.Extensions;
+using AccountingNote.ORM.DBModel;
 
 namespace AccountingNote.SystemAdmin
 {
@@ -46,9 +48,9 @@ namespace AccountingNote.SystemAdmin
                     if (int.TryParse(idText, out id))
                     {
                         //多出使用者ID保護資料
-                        var drAccounting = AccountingManager.GetAccounting(id,currentUser.ID);
+                        var accounting = AccountingManager.GetAccounting(id,currentUser.ID);
 
-                        if (drAccounting == null)
+                        if (accounting == null)
                         {
                             this.ltlMsg.Text = "Data doesn't exist";
                             this.btnSave.Visible = false;
@@ -56,10 +58,10 @@ namespace AccountingNote.SystemAdmin
                         }
                         else
                         {
-                            this.ddlActType.SelectedValue = drAccounting["ActType"].ToString();
-                            this.txtAmount.Text = drAccounting["Amount"].ToString();
-                            this.txtCaption.Text = drAccounting["Caption"].ToString();
-                            this.txtDesc.Text = drAccounting["Body"].ToString();
+                            this.ddlActType.SelectedValue = accounting.ActType.ToString();
+                            this.txtAmount.Text = accounting.Amount.ToString();
+                            this.txtCaption.Text = accounting.Caption.ToString();
+                            this.txtDesc.Text = accounting.Body.ToString();
                         }
                     }
                     else
@@ -81,34 +83,44 @@ namespace AccountingNote.SystemAdmin
             //    return;
             //}
             string account = this.Session["UserLoginInfo"] as string;
-            var drUserInfo = UserInfoManager.GetUserInfoByAccount(account);
+            var userInfo = UserInfoManager.GetUserInfoByAccount_ORM(account);
 
-            if (drUserInfo == null)
+            if (userInfo == null)
             {
                 Response.Redirect("/Login.aspx");
                 return;
             }
-            string userID = drUserInfo["ID"].ToString();
+            //string userID = drUserInfo["ID"].ToString();
+            Guid userGuid = userInfo.ID;
             string actTypeText = this.ddlActType.SelectedValue;
             string amountText = this.txtAmount.Text;
-            string caption = this.txtCaption.Text;
-            string body = this.txtDesc.Text;
 
             int amount = Convert.ToInt32(amountText);
             int actType = Convert.ToInt32(actTypeText);
 
             string idText = this.Request.QueryString["ID"];
+            Accounting accounting = new Accounting()
+            {
+                UserID = userGuid,
+                ActType = actType,
+                Amount = amount,
+                Caption = this.txtCaption.Text,
+                Body = this.txtDesc.Text
+            };
             if (string.IsNullOrWhiteSpace(idText))
             {
                 //Execute 'Insert Into db'
-                AccountingManager.CreateAccounting(userID, caption, amount, actType, body);
+                //AccountingManager.CreateAccounting(userID, caption, amount, actType, body);
+                AccountingManager.CreateAccounting(accounting);
             }
             else
             {
                 int id;
                 if (int.TryParse(idText, out id))
                 {
-                    AccountingManager.UpdateAccounting(id, userID, caption, amount, actType, body);
+                    accounting.ID = id;
+                    AccountingManager.UpdateAccounting(accounting);
+                    //AccountingManager.UpdateAccounting(id, userID, caption, amount, actType, body);
                 }
             }
             Response.Redirect("/SystemAdmin/AccountingList.aspx");
@@ -158,10 +170,9 @@ namespace AccountingNote.SystemAdmin
             int id;
             if (int.TryParse(idText, out id))
             {
-                AccountingManager.DeleteAccounting(id);
+                AccountingManager.DeleteAccounting_ORM(id);
             }
             Response.Redirect("/SystemAdmin/AccountingList.aspx");
-
         }
     }
 }

@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
@@ -51,6 +54,13 @@
       <Project>{776FF19B-0F50-4334-9704-32D72773BAF3}</Project>
       <Name>AccountingNote.DBsourse</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AccountingNote.ORM\AccountingNote.ORM.csproj">
+      <Project>{7E047CA9-DEE7-47A6-BE85-52887B8CF9F3}</Project>
+      <Name>AccountingNote.ORM</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

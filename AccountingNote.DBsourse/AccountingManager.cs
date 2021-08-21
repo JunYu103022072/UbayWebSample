@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using AccountingNote.ORM.DBModel;
 
 namespace AccountingNote.DBsourse
 {
     public class AccountingManager
     {
+        /// <summary>
+        /// 查詢流水帳清單
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
         public static DataTable GetAccountingList(string userID)
         {
             string connectionString = DBHelper.GetConnectionString();
@@ -39,12 +42,28 @@ namespace AccountingNote.DBsourse
             }
         }
 
+        public static List<Accounting> GetAccountingList(Guid userID)
+        {
+            try
+            {
+                using (ContextModel context = new ContextModel())
+                {
+                    var query =
+                        (from item in context.Accountings
+                         where item.UserID == userID
+                         select item);
 
+                    var list = query.ToList();
+                    return list;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog(ex);
+                return null;
+            }
+        }
 
-        /// <summary>查詢流水帳清單</summary>
-        /// <param name="id"></param>
-        /// <param name="userID"></param>
-        /// 一次查詢兩個值比較不容易讓人窺探資料
         public static DataRow GetAccounting(int id, string userID)
         {
             string connectionString = DBHelper.GetConnectionString();
@@ -73,16 +92,85 @@ namespace AccountingNote.DBsourse
                 return null;
             }
         }
-
-
-
-        /// <summary>更改流水帳</summary>
-        /// <param name="ID"></param>
+        /// <summary>查詢流水帳</summary>
+        /// <param name="id"></param>
         /// <param name="userID"></param>
-        /// <param name="caption"></param>
-        /// <param name="amount"></param>
-        /// <param name="actType"></param>
-        /// <param name="body"></param>
+        /// 一次查詢兩個值比較不容易讓人窺探資料
+        public static Accounting GetAccounting(int id, Guid userID)
+        {
+            try
+            {
+                using (ContextModel context = new ContextModel())
+                {
+                    var query =
+                        (from item in context.Accountings
+                         where item.ID == id && item.UserID == userID
+                         select item);
+
+                    var obj = query.FirstOrDefault();
+                    return obj;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog(ex);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 取得第一筆和最後一筆使用者
+        /// </summary>
+        /// <returns></returns>
+        public static DataRow GetFirstAndLastAccount()
+        {
+            string connectionString = DBHelper.GetConnectionString();
+            string dbCommand =
+                $@" SELECT 
+                     MAX(CreateDate) AS LAST
+                    ,MIN(CreateDate) AS FIRST
+                    FROM Accounting
+                ";
+
+            List<SqlParameter> list = new List<SqlParameter>();
+            try
+            {
+                return DBHelper.ReadDataRow(connectionString, dbCommand, list);
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog(ex);
+                return null;
+            }
+        }
+
+        public static DataRow GetTotal()
+        {
+            string connectionString = DBHelper.GetConnectionString();
+            string dbCommand =
+                $@" SELECT 
+                        COUNT(Accounting.ID) AS TotalAccount,
+                        (
+                        SELECT COUNT(ID) 
+                        FROM UserInfo 
+                        )TotalUser
+                        FROM Accounting
+                ";
+
+            List<SqlParameter> list = new List<SqlParameter>();
+            try
+            {
+                return DBHelper.ReadDataRow(connectionString, dbCommand, list);
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog(ex);
+                return null;
+            }
+        }
+
+
+
         public static bool UpdateAccounting(int ID, string userID, string caption, int amount, int actType, string body)
         {
             //  check input
@@ -90,6 +178,7 @@ namespace AccountingNote.DBsourse
                 throw new ArgumentException("Amount  must  between  0 and 1,000,000.");
             if (actType < 0 || actType > 1)
                 throw new ArgumentException("ActType must be 0 or 1");
+
 
             string connectionString = DBHelper.GetConnectionString();
             string dbCommand =
@@ -116,7 +205,7 @@ namespace AccountingNote.DBsourse
 
             try
             {
-                int effectRows = DBHelper.ModifyData(connectionString, dbCommand, paramlist);
+                int effectRows = DBHelper.ModifyData(paramlist, connectionString, dbCommand);
 
                 if (effectRows == 1)
                     return true;
@@ -129,8 +218,45 @@ namespace AccountingNote.DBsourse
                 return false;
             }
         }
-        /// <summary>刪除流水帳</summary>
+        /// <summary>更改流水帳</summary>
         /// <param name="ID"></param>
+        /// <param name="userID"></param>
+        /// <param name="caption"></param>
+        /// <param name="amount"></param>
+        /// <param name="actType"></param>
+        /// <param name="body"></param>
+        public static bool UpdateAccounting(Accounting accounting)
+        {
+            //  check input
+            if (accounting.Amount < 0 || accounting.Amount > 1000000)
+                throw new ArgumentException("Amount  must  between  0 and 1,000,000.");
+            if (accounting.ActType < 0 || accounting.ActType > 1)
+                throw new ArgumentException("ActType must be 0 or 1");
+            try
+            {
+                using (ContextModel context = new ContextModel())
+                {
+                    var dbObject =
+                        context.Accountings.Where(obj => obj.ID == accounting.ID).FirstOrDefault();
+                    if (dbObject != null)
+                    {
+                        dbObject.ActType = accounting.ActType;
+                        dbObject.Amount = accounting.Amount;
+                        dbObject.Caption = accounting.Caption;
+                        dbObject.Body = accounting.Body;
+
+                        context.SaveChanges();
+                    }
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog(ex);
+                return false;
+            }
+        }
+
         public static void DeleteAccounting(int ID)
         {
             List<SqlParameter> paramlist = new List<SqlParameter>();
@@ -149,15 +275,24 @@ namespace AccountingNote.DBsourse
                 Logger.WriteLog(ex);
             }
         }
-
-
-
-        /// <summary>建立流水帳</summary>
-        /// <param name="userID"></param>
-        /// <param name="caption"></param>
-        /// <param name="amount"></param>
-        /// <param name="actType"></param>
-        /// <param name="body"></param>
+        /// <summary>刪除流水帳</summary>
+        /// <param name="ID"></param>
+        public static void DeleteAccounting_ORM(int ID)
+        {
+            try
+            {
+                using (ContextModel context = new ContextModel())
+                {
+                    var dbRemove = context.Accountings.Where(obj => obj.ID == ID).FirstOrDefault();
+                    context.Accountings.Remove(dbRemove);
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog(ex);
+            }
+        }
         public static void CreateAccounting(string userID, string caption, int amount, int actType, string body)
         {
             //  check input
@@ -166,6 +301,13 @@ namespace AccountingNote.DBsourse
             if (actType < 0 || actType > 1)
                 throw new ArgumentException("ActType must be 0 or 1");
 
+            string bodyColumnSQL = "";
+            string bodyValueSQL = "";
+            if (!string.IsNullOrWhiteSpace(body))
+            {
+                bodyColumnSQL = ",Body";
+                bodyValueSQL = ",@body";
+            }
             string connectionString = DBHelper.GetConnectionString();
             string dbCommand =
                 $@" INSERT INTO [dbo].[Accounting]
@@ -175,7 +317,7 @@ namespace AccountingNote.DBsourse
                         ,Amount     
                         ,ActType    
                         ,CreateDate 
-                        ,Body       
+                        {bodyColumnSQL}
                     )
                     VALUES
                     (
@@ -184,7 +326,7 @@ namespace AccountingNote.DBsourse
                         ,@amount     
                         ,@actType    
                         ,@createDate 
-                        ,@body       
+                        {bodyValueSQL}   
                     ) ";
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -206,6 +348,33 @@ namespace AccountingNote.DBsourse
                         Logger.WriteLog(ex);
                     }
                 }
+            }
+        }
+        /// <summary>建立流水帳</summary>
+        /// <param name="userID"></param>
+        /// <param name="caption"></param>
+        /// <param name="amount"></param>
+        /// <param name="actType"></param>
+        /// <param name="body"></param>
+        public static void CreateAccounting(Accounting accounting)
+        {
+            if (accounting.Amount < 0 || accounting.Amount > 1000000)
+                throw new ArgumentException("Amount  must  between  0 and 1,000,000.");
+            if (accounting.ActType < 0 || accounting.ActType > 1)
+                throw new ArgumentException("ActType must be 0 or 1");
+
+            try
+            {
+                using (ContextModel context = new ContextModel())
+                {
+                    accounting.CreateDate = DateTime.Now;
+                    context.Accountings.Add(accounting);
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog(ex);
             }
         }
     }

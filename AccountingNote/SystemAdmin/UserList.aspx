@@ -6,6 +6,14 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <asp:Button runat="server" Text="Add" ID="btnAdd" />
-    <asp:GridView ID="GridView1" runat="server"></asp:GridView>
+    <asp:GridView ID="gvUserList" runat="server">
+        <Columns>
+            <asp:TemplateField HeaderText="Act">
+                <ItemTemplate>
+                    <a href="/SystemAdmin/UserDetail.aspx?ID=<%# Eval("Account") %>">Edit</a>
+                </ItemTemplate>
+            </asp:TemplateField>
+        </Columns>
+    </asp:GridView>
     <uc1:ucPager runat="server" ID="ucPager" />
 </asp:Content>

@@ -33,10 +33,19 @@ namespace AccountingNote.SystemAdmin
                 }
 
                 this.ltlAccount.Text = currentUser.Account;
-                this.ltlName.Text = currentUser.Name;
-                this.ltlEmail.Text = currentUser.Email;
-                this.ltlUserLevel.Text = currentUser.UserLevel;
-                this.ltlDateTime.Text = currentUser.DateTime;
+                this.txtName.Text = currentUser.Name;
+                this.txtEmail.Text = currentUser.Email;
+                //this.ltlUserLevel.Text = currentUser.UserLevel;
+                //string userLevel = currentUser.UserLevel;
+                //if(userLevel == "2")
+                //{
+                //    this.ltlUserLevel.Text = "管理員";
+                //}
+                //else
+                //{
+                //    this.ltlUserLevel.Text = "一般會員";
+                //}
+                //this.ltlDateTime.Text = currentUser.DateTime;
             }
         }
 
@@ -44,6 +53,16 @@ namespace AccountingNote.SystemAdmin
         {
             AuthManager.Logout();            // 清除登入資訊
             Response.Redirect("/Login.aspx");
+        }
+
+        protected void btnSave_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnChange_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

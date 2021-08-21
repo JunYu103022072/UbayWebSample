@@ -18,7 +18,8 @@
             <tr>
                 <td>
                     <a href="UserInfo.aspx">使用者資訊</a> <br />
-                    <a href="AccountingList.aspx">流水帳管理</a>
+                    <a href="AccountingList.aspx">流水帳管理</a><br />
+                    <a href="UserList.aspx">會員管理</a>
                 </td>
                 <td>
                     <table>
@@ -32,12 +33,14 @@
                             <th>名字</th>
                             <td>
                                 <asp:Literal ID="ltlName" runat="server"></asp:Literal>
+                                <asp:TextBox ID="txtName" runat="server"></asp:TextBox>
                             </td>
                         </tr>
                         <tr>
                             <th>Email</th>
                             <td>
                                 <asp:Literal ID="ltlEmail" runat="server"></asp:Literal>
+                                <asp:TextBox ID="txtEmail" runat="server"></asp:TextBox>
                             </td>
                         </tr>
                         <tr>
@@ -53,7 +56,10 @@
                             </td>
                         </tr>
                     </table>
-                    <asp:Button runat="server" ID="btnLogout" Text="LogOut" OnClick="btnLogout_Click" />
+                    <asp:Button runat="server" ID="btnSave" Text="SAVE"  OnClick="btnSave_Click" />
+                    <asp:Button runat="server" ID="btnLogout" Text="登出" OnClick="btnLogout_Click" />
+
+                    <asp:Button runat="server" ID="btnChange" Text="變更密碼" OnClick="btnChange_Click"  />
                 </td>
             </tr>
         </table>

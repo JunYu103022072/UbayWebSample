@@ -8,6 +8,7 @@ using System.Data;
 using AccountingNote.DBsourse;
 using System.Drawing;
 using AccountingNote.Auth;
+using AccountingNote.ORM.DBModel;
 
 namespace AccountingNote.SystemAdmin
 {
@@ -32,30 +33,28 @@ namespace AccountingNote.SystemAdmin
                 return;
             }
             //Read Accounting Data
-            var dt = AccountingManager.GetAccountingList(currentUser.ID);
-            if (dt.Rows.Count > 0)          //check is empty data
+            //var dt = AccountingManager.GetAccountingList(currentUser.UserGuid);
+            var list = AccountingManager.GetAccountingList(currentUser.ID);
+            //if (dt.Rows.Count > 0)
+            //{
+            //this.gvAccountList.DataSource = list;
+            //this.gvAccountList.DataBind();
+
+            //this.ucPager2.TotalSize = list.Count;
+            //this.ucPager2.Bind();
+
+            //int totalPages = this.GetTotalPages(dt);
+            //var dtPaged = this.GetPageDataTable(list);
+            //this.gvAccountList.DataSource = dt;
+
+            //var pages = (dt.Rows.Count / 10);
+            if (list.Count > 0)
             {
-                //var totalPages = this.GetTotalPages(dt);   //ucPager替代
-                var dtPages = this.GetPageDataTable(dt);
-
-                this.ucPager2.TotalSize = dt.Rows.Count;
-                this.ucPager2.Bind();
-                //this.plcNoData.Visible = false;
-                //資料繫結 
-                this.gvAccountList.DataSource = dtPages;
+                var pagedList = this.GetPageDataTable(list);
+                this.gvAccountList.DataSource = pagedList;
                 this.gvAccountList.DataBind();
-
-                //var pages = (dt.Rows.Count / 10);
-                //if (dt.Rows.Count % 10 > 0)
-                //{
-                //    pages += 1;
-                //    this.ltlPager.Text = $"共 {dt.Rows.Count} 筆, 共 {pages} 頁, 目前在第{this.GetCurrentPage()}頁 <br/>";
-
-                //    for (var i = 1; i <= totalPages; i++)
-                //    {
-                //        this.ltlPager.Text += $"<a href='AccountingList.aspx?page={i}'>{i}</a>&nbsp;";
-                //    }
-                //}
+                this.ucPager2.TotalSize = list.Count;
+                this.ucPager2.Bind();
             }
             else
             {
@@ -79,6 +78,11 @@ namespace AccountingNote.SystemAdmin
                 return 1;
 
             return intPage;
+        }
+        private List<Accounting> GetPageDataTable(List<Accounting> list)
+        {
+            int startIndex = (this.GetCurrentPage() - 1) * 10;
+            return list.Skip(startIndex).Take(10).ToList();
         }
         //取資料如何分頁
         private DataTable GetPageDataTable(DataTable dt)
@@ -128,8 +132,11 @@ namespace AccountingNote.SystemAdmin
             {
                 Label lbl = row.FindControl("lblActType") as Label;
 
-                var dr = row.DataItem as DataRowView;
-                int actType = dr.Row.Field<int>("ActType");
+                //var dr = row.DataItem as DataRowView;
+                //int actType = dr.Row.Field<int>("ActType");
+                var rowData = row.DataItem as Accounting;
+                int actType = rowData.ActType;
+
                 if (actType == 0)
                 {
                     lbl.Text = "支出";
@@ -139,12 +146,12 @@ namespace AccountingNote.SystemAdmin
 
                     lbl.Text = "收入";
                 }
-                if (dr.Row.Field<int>("Amount") > 1500)
+                if (rowData.Amount > 1500)
                 {
                     lbl.ForeColor = Color.Red;
                 }
             }
         }
-
+        
     }
 }

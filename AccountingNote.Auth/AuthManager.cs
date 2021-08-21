@@ -30,21 +30,21 @@ namespace AccountingNote.Auth
             return null;
 
             //有值的狀況下存使用者資訊回傳
-            DataRow dr = UserInfoManager.GetUserInfoByAccount(account);
-
-            if (dr == null)
+            //DataRow dr = UserInfoManager.GetUserInfoByAccount(account);
+            var userInfo = UserInfoManager.GetUserInfoByAccount_ORM(account);
+            if (userInfo == null)
             {
                 HttpContext.Current.Session["UserLoginInfo"] = null;
                 return null;
             }
 
             UserInfoModel model = new UserInfoModel();
-            model.ID = dr["ID"].ToString();
-            model.Account = dr["Account"].ToString();
-            model.Name = dr["Name"].ToString();
-            model.Email = dr["Email"].ToString();
-            model.UserLevel = dr["UserLevel"].ToString();
-            model.DateTime = dr["Datetime"].ToString();
+            model.ID = userInfo.ID;
+            model.Account = userInfo.Account;
+            model.Name = userInfo.Name;
+            model.Email = userInfo.Email;
+            //model.UserLevel = dr["UserLevel"].ToString();
+            //model.DateTime = dr["Datetime"].ToString();
             return model;
         }
 
@@ -66,19 +66,19 @@ namespace AccountingNote.Auth
                 errorMsg = "Required the Account / PWD";
                 return false;
             }
-            var dr = UserInfoManager.GetUserInfoByAccount(account);
+            var userInfo = UserInfoManager.GetUserInfoByAccount_ORM(account);
             //check null
-            if (dr == null)
+            if (userInfo == null)
             {
                 errorMsg = $"This Account : {account} doesn't exists";
                 return false;
             }
             //check Account / Pwd
             //Compare 比對大小寫 , true = 大小寫不干擾 false = 大小寫字串需一致
-            if (string.Compare(dr["Account"].ToString(), account, true) == 0 && string.Compare(dr["PWD"].ToString(), PWD, false) == 0)
+            if (string.Compare(userInfo.Account.ToString(), account, true) == 0 && string.Compare(userInfo.PWD.ToString(), PWD, false) == 0)
             {
                 //進入使用者畫面
-                HttpContext.Current.Session["UserLoginInfo"] = dr["Account"].ToString();
+                HttpContext.Current.Session["UserLoginInfo"] = userInfo.Account.ToString();
 
                 errorMsg = string.Empty;
                 return true;

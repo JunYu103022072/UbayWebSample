@@ -72,10 +72,5 @@ namespace AccountingNote.DBsourse
                 }
             }
         }
-
-        internal static int ModifyData(string connectionString, string dbCommand, List<SqlParameter> paramlist)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
