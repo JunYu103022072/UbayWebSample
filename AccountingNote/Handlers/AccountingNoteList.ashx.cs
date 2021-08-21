@@ -37,7 +37,6 @@ namespace AccountingNote.Handlers
             }
 
             //string userID = userInfo["ID"].ToString();
-            Guid userID = userInfo.ID;
 
 
             //List<AccountingNoteViewModel> list = new List<AccountingNoteViewModel>();
@@ -54,7 +53,7 @@ namespace AccountingNote.Handlers
             //    list.Add(model);
             //}
             //List<Accounting> list = sourceList.Select(obj => new AccountingNoteViewModel()
-            List<Accounting> sourceList = AccountingManager.GetAccountingList(userID);
+            List<Accounting> sourceList = AccountingManager.GetAccountingList(userInfo.ID);
             List<AccountingNoteViewModel> list =
               sourceList.Select(obj => new AccountingNoteViewModel()
               {

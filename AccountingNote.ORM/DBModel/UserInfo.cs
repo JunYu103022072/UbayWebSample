@@ -30,5 +30,9 @@ namespace AccountingNote.ORM.DBModel
         public int UserLevel { get; set; }
 
         public DateTime Datetime { get; set; }
+
+        [Required]
+        [StringLength(20)]
+        public string Phone { get; set; }
     }
 }

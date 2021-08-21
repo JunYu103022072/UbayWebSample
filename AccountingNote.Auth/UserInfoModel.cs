@@ -16,6 +16,8 @@ namespace AccountingNote.Auth
 
         public string Email { get; set; }   
 
+        public string Phone { get; set; }
+
         //public Guid UserGuid        //把ID轉成GUID
         //{
         //    get
