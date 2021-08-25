@@ -1,13 +1,10 @@
-﻿using System;
+﻿using AccountingNote.Auth;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
-using System.Data;
-using System.Data.SqlClient;
 using System.Web.UI.WebControls;
-using AccountingNote.DBsourse;
-using AccountingNote.Auth;
 
 namespace AccountingNote.SystemAdmin
 {
@@ -15,54 +12,21 @@ namespace AccountingNote.SystemAdmin
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!this.IsPostBack)                           //可能是按鈕跳回本頁 , 所以要判斷PostBack
+            var currentUser = AuthManager.GetCurrentUser();
+            //帳號不存在轉登入頁
+            if (currentUser == null)
             {
-                //還沒登入的話 導回登入頁
-                if (!AuthManager.Islogined())
-                {
-                    Response.Redirect("/Login.aspx");
-                    return;
-                }
-
-                var currentUser = AuthManager.GetCurrentUser();
-                //帳號不存在轉登入頁
-                if (currentUser == null)
-                {
-                    Response.Redirect("/Login.aspx");
-                    return;
-                }
-
-                this.ltlAccount.Text = currentUser.Account;
-                this.txtName.Text = currentUser.Name;
-                this.txtEmail.Text = currentUser.Email;
-                //this.ltlUserLevel.Text = currentUser.UserLevel;
-                //string userLevel = currentUser.UserLevel;
-                //if(userLevel == "2")
-                //{
-                //    this.ltlUserLevel.Text = "管理員";
-                //}
-                //else
-                //{
-                //    this.ltlUserLevel.Text = "一般會員";
-                //}
-                //this.ltlDateTime.Text = currentUser.DateTime;
+                Response.Redirect("/Login.aspx");
+                return;
             }
+            this.ltlAccount.Text = currentUser.Account;
+            this.ltlName.Text = currentUser.Name;
+            this.ltlEmail.Text = currentUser.Email;
         }
 
         protected void btnLogout_Click(object sender, EventArgs e)
         {
-            AuthManager.Logout();            // 清除登入資訊
-            Response.Redirect("/Login.aspx");
-        }
-
-        protected void btnSave_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        protected void btnChange_Click(object sender, EventArgs e)
-        {
-
+            this.Session["UserLoginedInfo"] = null;
         }
     }
 }

@@ -1,68 +1,12 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="UserInfo.aspx.cs" Inherits="AccountingNote.SystemAdmin.UserInfo" %>
-
-<!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title></title>
-</head>
-<body>
-    <form id="form1" runat="server">
-        <table>
-            <tr>
-                <td colspan="2">
-                    <h1>流水帳管理系統 - 後台</h1>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <a href="UserInfo.aspx">使用者資訊</a> <br />
-                    <a href="AccountingList.aspx">流水帳管理</a><br />
-                    <a href="UserList.aspx">會員管理</a>
-                </td>
-                <td>
-                    <table>
-                        <tr>
-                            <th>帳號</th>
-                            <td>
-                                <asp:Literal ID="ltlAccount" runat="server"></asp:Literal>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>名字</th>
-                            <td>
-                                <asp:Literal ID="ltlName" runat="server"></asp:Literal>
-                                <asp:TextBox ID="txtName" runat="server"></asp:TextBox>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Email</th>
-                            <td>
-                                <asp:Literal ID="ltlEmail" runat="server"></asp:Literal>
-                                <asp:TextBox ID="txtEmail" runat="server"></asp:TextBox>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>會員等級</th>
-                            <td>
-                                <asp:Literal ID="ltlUserLevel" runat="server"></asp:Literal>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>創立時間</th>
-                            <td>
-                                <asp:Literal ID="ltlDateTime" runat="server"></asp:Literal>
-                            </td>
-                        </tr>
-                    </table>
-                    <asp:Button runat="server" ID="btnSave" Text="SAVE"  OnClick="btnSave_Click" />
-                    <asp:Button runat="server" ID="btnLogout" Text="登出" OnClick="btnLogout_Click" />
-
-                    <asp:Button runat="server" ID="btnChange" Text="變更密碼" OnClick="btnChange_Click"  />
-                </td>
-            </tr>
-        </table>
-    </form>
-</body>
-</html>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SystemAdmin/Admin.Master" AutoEventWireup="true" CodeBehind="UserInfo.aspx.cs" Inherits="AccountingNote.SystemAdmin.UserInfo" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    <h2>個人資訊</h2>
+    <table border="1px">
+        <tr><td>帳號</td><td><asp:Literal runat="server" ID="ltlAccount"></asp:Literal></td></tr>
+        <tr><td>姓名</td><td><asp:Literal runat="server" ID="ltlName"></asp:Literal></td></tr>
+        <tr><td>Email</td><td><asp:Literal runat="server" ID="ltlEmail"></asp:Literal></td></tr>
+    </table>
+    <asp:Button runat="server" ID="btnLogout" Text="登出" OnClick="btnLogout_Click"/>
+</asp:Content>

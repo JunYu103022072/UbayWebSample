@@ -75,5 +75,94 @@ namespace AccountingNote.DBsourse
                 return null;
             }
         }
+
+        public static List<UserInfo> GetUserList_ORM()
+        {
+            try
+            {
+                using (ContextModel context = new ContextModel())
+                {
+                    var query =
+                        (from item in context.UserInfoes
+                         select item);
+
+                    var list = query.ToList();
+                    return list;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog(ex);
+                return null;
+            }
+        }
+        public static UserInfo GetUser(Guid ID)
+        {
+            try
+            {
+                using (ContextModel context = new ContextModel())
+                {
+                    var query =
+                        (from item in context.UserInfoes
+                         where item.ID == ID
+                         select item);
+
+                    var obj = query.FirstOrDefault();
+                    return obj;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog(ex);
+                return null;
+            }
+        }
+        public static bool UpdateUserInfo(UserInfo userInfo)
+        {
+            try
+            {
+                using(ContextModel context = new ContextModel())
+                {
+                    var dbuser = context.UserInfoes.Where(user => user.ID == userInfo.ID).FirstOrDefault();
+
+                    if(dbuser != null)
+                    {
+                        dbuser.Name = userInfo.Name;
+                        dbuser.Email = userInfo.Email;
+
+                        context.SaveChanges();
+                    }
+                    return true;
+                }
+            }
+            catch(Exception ex)
+            {
+                Logger.WriteLog(ex);
+                return false;
+            }
+        }
+        public static bool UpdateUserPassword(UserInfo userInfo)
+        {
+            try
+            {
+                using (ContextModel context = new ContextModel())
+                {
+                    var dbuser = context.UserInfoes.Where(user => user.ID == userInfo.ID).FirstOrDefault();
+
+                    if (dbuser != null)
+                    {
+                        dbuser.PWD = userInfo.PWD;
+
+                        context.SaveChanges();
+                    }
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog(ex);
+                return false;
+            }
+        }
     }
 }

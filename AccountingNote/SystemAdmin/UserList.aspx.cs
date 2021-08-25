@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AccountingNote.DBsourse;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -17,9 +18,16 @@ namespace AccountingNote.SystemAdmin
                 return;
             }
             //取得使用者
-            var cUser = AccountingNote.Auth.AuthManager.GetCurrentUser();
-
-            this.gvUserList.DataSource = AccountingNote.DBsourse.UserInfoManager.GetUserList();
+            var currentUser = AccountingNote.Auth.AuthManager.GetCurrentUser();
+            //帳號不存在轉登入頁
+            if (currentUser == null)
+            {
+                this.Session["UserLoginInfo"] = null;
+                Response.Redirect("/Login.aspx");
+                return;
+            }
+            var userList = UserInfoManager.GetUserList_ORM();
+            this.gvUserList.DataSource = userList.ToList();
             this.gvUserList.DataBind();
         }
 
@@ -29,20 +37,18 @@ namespace AccountingNote.SystemAdmin
 
             if (row.RowType == DataControlRowType.DataRow)
             {
+                string account = this.Request.Form["Account"];
                 var dr = row.DataItem as DataRowView;
-                Label label = new Label();
-                label.ID = "lblLevel";
-
+                Label lbl = row.FindControl("UserLevel") as Label;
+                var rowData = row.DataItem as UserInfo;
                 int level = dr.Row.Field<int>("UserLevel");
-                string userL = level.ToString();
-                if (level == 1)
+                if (level == 2)
                 {
-                    userL = "高級會員";
+                    account = "管理員";
                 }
                 else
                 {
-
-                    userL = "一般會員";
+                    lbl.Text = "一般會員";
                 }
  
             }

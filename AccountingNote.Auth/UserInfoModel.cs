@@ -12,11 +12,17 @@ namespace AccountingNote.Auth
 
         public string Account { get; set; }
 
+        public string Password { get; set; }
+
         public string Name { get; set; }
 
-        public string Email { get; set; }   
+        public string Email { get; set; }
 
-        public string Phone { get; set; }
+        public int UserLevel { get; set; }
+
+        public DateTime DateTime { get; set; }
+
+        public string MobilePhone { get; set; }
 
         //public Guid UserGuid        //把ID轉成GUID
         //{
@@ -30,8 +36,5 @@ namespace AccountingNote.Auth
         //    }
         //}
 
-        //public string UserLevel { get; set; }
-
-        //public string DateTime { get; set; }
     }
 }

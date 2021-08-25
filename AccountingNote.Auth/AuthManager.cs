@@ -41,9 +41,12 @@ namespace AccountingNote.Auth
             UserInfoModel model = new UserInfoModel();
             model.ID = userInfo.ID;
             model.Account = userInfo.Account;
+            model.Password = userInfo.PWD;
             model.Name = userInfo.Name;
             model.Email = userInfo.Email;
-            model.Phone = userInfo.Phone;
+            model.MobilePhone = userInfo.MobilePhone;
+            model.UserLevel = userInfo.UserLevel;
+            model.DateTime = userInfo.Datetime;
             //model.UserLevel = dr["UserLevel"].ToString();
             //model.DateTime = dr["Datetime"].ToString();
             return model;

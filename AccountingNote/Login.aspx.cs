@@ -34,8 +34,9 @@ namespace AccountingNote
             string inp_Account = this.txtAccount.Text;
             string inp_PWD = this.txtPassword.Text;
             string errorMsg;
+            
 
-            if(!AuthManager.TryLogin(inp_Account, inp_PWD, out errorMsg))
+            if (!AuthManager.TryLogin(inp_Account, inp_PWD, out errorMsg))
             {
                 this.ltlMessage.Text = errorMsg;
                 return;

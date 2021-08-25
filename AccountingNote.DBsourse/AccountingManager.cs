@@ -169,8 +169,6 @@ namespace AccountingNote.DBsourse
             }
         }
 
-
-
         public static bool UpdateAccounting(int ID, string userID, string caption, int amount, int actType, string body)
         {
             //  check input

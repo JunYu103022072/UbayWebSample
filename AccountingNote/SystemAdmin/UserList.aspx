@@ -5,12 +5,13 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <asp:Button runat="server" Text="Add" ID="btnAdd" />
-    <asp:GridView ID="gvUserList" runat="server">
+    <asp:Button runat="server" Text="增加會員" ID="btnAdd" />
+    <asp:GridView ID="gvUserList" runat="server" >
         <Columns>
+            <asp:BoundField />
             <asp:TemplateField HeaderText="Act">
                 <ItemTemplate>
-                    <a href="/SystemAdmin/UserDetail.aspx?ID=<%# Eval("Account") %>">Edit</a>
+                    <a href="/SystemAdmin/UserDetail.aspx?ID=<%# Eval("ID") %>">Edit</a>
                 </ItemTemplate>
             </asp:TemplateField>
         </Columns>

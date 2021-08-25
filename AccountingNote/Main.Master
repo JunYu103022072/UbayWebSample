@@ -11,12 +11,30 @@
 </head>
 <body>
     <form id="form1" runat="server">
-        <div>
             <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
             </asp:ContentPlaceHolder>
-  
-            <br />
-        </div>
+                   <table>
+            <tr>
+                <td colspan="2">
+                    <h1>流水帳管理系統 - 後台</h1>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="UserInfo.aspx">使用者資訊</a> <br />
+                    <a href="AccountingList.aspx">流水帳管理</a><br />
+                    <a href="UserList.aspx">會員管理</a>
+                </td>
+                <td>
+                    <table>
+                        <tr>
+                          <%--填入內容--%>
+                        </tr>
+                    </table>
+                   <%--填入按鈕--%>
+                </td>
+            </tr>
+        </table>
     </form>
 </body>
 </html>
