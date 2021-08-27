@@ -6,7 +6,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <asp:Button runat="server" Text="增加會員" ID="btnAdd" />
-    <asp:GridView ID="gvUserList" runat="server" >
+    <asp:GridView ID="gvUserList" runat="server" AutoGenerateColumns="false">
         <Columns>
             <asp:BoundField />
             <asp:TemplateField HeaderText="Act">
