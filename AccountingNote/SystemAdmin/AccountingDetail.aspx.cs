@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using AccountingNote.Auth;
 using AccountingNote.DBsourse;
 using AccountingNote.Extensions;
+using AccountingNote.Helper;
 using AccountingNote.ORM.DBModel;
 
 namespace AccountingNote.SystemAdmin
@@ -76,12 +77,12 @@ namespace AccountingNote.SystemAdmin
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
-            //List<string> msgList = new List<string>();
-            //if (!this.CheckInput(out msgList))
-            //{
-            //    this.ltlMsg.Text = string.Join("<br/>", msgList);
-            //    return;
-            //}
+            List<string> msgList = new List<string>();
+            if (!this.CheckInput(out msgList))
+            {
+                this.ltlMsg.Text = string.Join("<br/>", msgList);
+                return;
+            }
             string account = this.Session["UserLoginInfo"] as string;
             var userInfo = UserInfoManager.GetUserInfoByAccount_ORM(account);
 
@@ -107,6 +108,17 @@ namespace AccountingNote.SystemAdmin
                 Caption = this.txtCaption.Text,
                 Body = this.txtDesc.Text
             };
+            //假如有上傳檔案，寫入檔名
+            if (this.fileCover.HasFiles &&
+                FileHelper.ValidFileUpload(this.fileCover, out List<string> tempList))
+            {
+                string saveFileName = FileHelper.GetNewFileName(this.fileCover);
+                string filePath = System.IO.Path.Combine(this.GetSaveFolderPath(), saveFileName);
+                this.fileCover.SaveAs(filePath);
+
+                accounting.CoverImage = saveFileName;
+            }
+      
             if (string.IsNullOrWhiteSpace(idText))
             {
                 //Execute 'Insert Into db'
@@ -173,6 +185,11 @@ namespace AccountingNote.SystemAdmin
                 AccountingManager.DeleteAccounting_ORM(id);
             }
             Response.Redirect("/SystemAdmin/AccountingList.aspx");
+        }
+
+        private string GetSaveFolderPath()
+        {
+            return Server.MapPath("~/FileDownload/Accounting");
         }
     }
 }

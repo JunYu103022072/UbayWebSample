@@ -17,7 +17,7 @@
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
-    <IISExpressSSLPort />
+    <IISExpressSSLPort>44351</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -89,10 +89,10 @@
     <Content Include="SystemAdmin\AccountingDetail.aspx" />
     <Content Include="SystemAdmin\AccountingList.aspx" />
     <Content Include="SystemAdmin\ChangePassword.aspx" />
-    <Content Include="SystemAdmin\UserChangeInfo.aspx" />
+    <Content Include="SystemAdmin\UserCreate.aspx" />
+    <Content Include="SystemAdmin\UserDetail.aspx" />
     <Content Include="SystemAdmin\UserInfo.aspx" />
     <Content Include="SystemAdmin\UserList.aspx" />
-    <Content Include="SystemAdmin\UserList2.aspx" />
     <Content Include="UserControl\ucPager.ascx" />
     <Content Include="UserControl\ucPager2.ascx" />
     <Content Include="Web.config" />
@@ -129,6 +129,7 @@
     <Compile Include="Handlers\CreateAccountingNote.ashx.cs">
       <DependentUpon>CreateAccountingNote.ashx</DependentUpon>
     </Compile>
+    <Compile Include="Helper\FileHelper.cs" />
     <Compile Include="Main.Master.cs">
       <DependentUpon>Main.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -183,12 +184,19 @@
     <Compile Include="SystemAdmin\ChangePassword.aspx.designer.cs">
       <DependentUpon>ChangePassword.aspx</DependentUpon>
     </Compile>
-    <Compile Include="SystemAdmin\UserChangeInfo.aspx.cs">
-      <DependentUpon>UserChangeInfo.aspx</DependentUpon>
+    <Compile Include="SystemAdmin\UserCreate.aspx.cs">
+      <DependentUpon>UserCreate.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="SystemAdmin\UserChangeInfo.aspx.designer.cs">
-      <DependentUpon>UserChangeInfo.aspx</DependentUpon>
+    <Compile Include="SystemAdmin\UserCreate.aspx.designer.cs">
+      <DependentUpon>UserCreate.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SystemAdmin\UserDetail.aspx.cs">
+      <DependentUpon>UserDetail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SystemAdmin\UserDetail.aspx.designer.cs">
+      <DependentUpon>UserDetail.aspx</DependentUpon>
     </Compile>
     <Compile Include="SystemAdmin\UserInfo.aspx.cs">
       <DependentUpon>UserInfo.aspx</DependentUpon>
@@ -203,13 +211,6 @@
     </Compile>
     <Compile Include="SystemAdmin\UserList.aspx.designer.cs">
       <DependentUpon>UserList.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SystemAdmin\UserList2.aspx.cs">
-      <DependentUpon>UserList2.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SystemAdmin\UserList2.aspx.designer.cs">
-      <DependentUpon>UserList2.aspx</DependentUpon>
     </Compile>
     <Compile Include="UserControl\ucPager.ascx.cs">
       <DependentUpon>ucPager.ascx</DependentUpon>
@@ -242,6 +243,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="FileDownload\Accounting\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AccountingNote.Auth\AccountingNote.Auth.csproj">

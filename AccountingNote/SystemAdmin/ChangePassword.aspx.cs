@@ -36,7 +36,7 @@ namespace AccountingNote.SystemAdmin
             string inp_PWD2 = this.txtNewPWD2.Text;
             string account = this.Session["UserLoginInfo"] as string;
             var userInfo = UserInfoManager.GetUserInfoByAccount_ORM(account);
-            ORM.DBModel.UserInfo user = new ORM.DBModel.UserInfo()
+            ORM.DBModel.UserInfor user = new ORM.DBModel.UserInfor()
             {
                 PWD = inp_PWD
             };

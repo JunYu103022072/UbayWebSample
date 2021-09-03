@@ -144,7 +144,7 @@ namespace AccountingNote.DBsourse
             }
         }
 
-        public static DataRow GetTotal()
+        public static DataRow GetTotalA()
         {
             string connectionString = DBHelper.GetConnectionString();
             string dbCommand =
@@ -166,6 +166,30 @@ namespace AccountingNote.DBsourse
             {
                 Logger.WriteLog(ex);
                 return null;
+            }
+        }
+        public static int GetTotal()
+        {
+            try 
+            {
+                using(ContextModel context = new ContextModel())
+                {
+                    var totalMinus = (from item in context.Accountings
+                                      where item.ActType == 0
+                                      select item.Amount
+                                 ).Sum();
+                    var totalAdd = (from item in context.Accountings
+                                      where item.ActType == 1
+                                      select item.Amount
+                               ).Sum();
+                    int total = totalAdd - totalMinus;
+                    return total;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog(ex);
+                return 0;
             }
         }
 
@@ -242,6 +266,7 @@ namespace AccountingNote.DBsourse
                         dbObject.Amount = accounting.Amount;
                         dbObject.Caption = accounting.Caption;
                         dbObject.Body = accounting.Body;
+                        dbObject.CoverImage = accounting.CoverImage;
 
                         context.SaveChanges();
                     }

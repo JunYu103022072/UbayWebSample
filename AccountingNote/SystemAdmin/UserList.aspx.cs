@@ -1,4 +1,5 @@
 ﻿using AccountingNote.DBsourse;
+using AccountingNote.ORM.DBModel;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -37,21 +38,23 @@ namespace AccountingNote.SystemAdmin
 
             if (row.RowType == DataControlRowType.DataRow)
             {
-                string account = this.Request.Form["Account"];
-                var dr = row.DataItem as DataRowView;
-                Label lbl = row.FindControl("UserLevel") as Label;
-                var rowData = row.DataItem as UserInfo;
-                int level = dr.Row.Field<int>("UserLevel");
-                if (level == 2)
+                Label lbl = row.FindControl("lblUserLevel") as Label;
+                var rowData = row.DataItem as ORM.DBModel.UserInfor;
+                int userLevel = rowData.UserLevel;
+                if( userLevel == 2)
                 {
-                    account = "管理員";
+                    lbl.Text = "管理者";
                 }
                 else
                 {
                     lbl.Text = "一般會員";
                 }
- 
             }
+        }
+
+        protected void btnAdd_Click(object sender, EventArgs e)
+        {
+            this.Response.Redirect("UserCreate.aspx");
         }
     }
 }

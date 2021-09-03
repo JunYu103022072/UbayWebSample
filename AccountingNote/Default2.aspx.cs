@@ -13,7 +13,7 @@ namespace AccountingNote
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            DataRow drTotal = AccountingManager.GetTotal();
+            DataRow drTotal = AccountingManager.GetTotalA();
             DataRow drAc = AccountingManager.GetFirstAndLastAccount();
 
             this.lblFirst.Text = drAc["FIRST"].ToString();

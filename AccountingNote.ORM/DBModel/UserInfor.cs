@@ -7,7 +7,7 @@ namespace AccountingNote.ORM.DBModel
     using System.Data.Entity.Spatial;
 
     [Table("UserInfo")]
-    public partial class UserInfo
+    public partial class UserInfor
     {
         public Guid ID { get; set; }
 

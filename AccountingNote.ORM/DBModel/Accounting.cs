@@ -24,5 +24,8 @@ namespace AccountingNote.ORM.DBModel
 
         [StringLength(500)]
         public string Body { get; set; }
+
+        [StringLength(50)]
+        public string CoverImage { get; set; }
     }
 }

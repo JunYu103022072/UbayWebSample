@@ -13,19 +13,19 @@ namespace AccountingNote.ORM.DBModel
         }
 
         public virtual DbSet<Accounting> Accountings { get; set; }
-        public virtual DbSet<UserInfo> UserInfoes { get; set; }
+        public virtual DbSet<UserInfor> UserInfoes { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<UserInfo>()
+            modelBuilder.Entity<UserInfor>()
                 .Property(e => e.Account)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<UserInfo>()
+            modelBuilder.Entity<UserInfor>()
                 .Property(e => e.PWD)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<UserInfo>()
+            modelBuilder.Entity<UserInfor>()
                 .Property(e => e.MobilePhone)
                 .IsUnicode(false);
         }

@@ -29,7 +29,8 @@
                 </td>
                 <td>
                     <!--這裡放主要訊息-->
-                    <asp:Button ID="btnCreate" runat="server" Text="Add Accounting" OnClick="btnCreate_Click" />
+                     <asp:Button ID="btnCreate" runat="server" Text="Add Accounting" OnClick="btnCreate_Click" />
+                     <asp:Literal runat="server" ID="ltlTotal"></asp:Literal>
                     <asp:GridView ID="gvAccountList" runat="server" AutoGenerateColumns="False" OnRowDataBound="gvAccountList_RowDataBound" CellPadding="4" ForeColor="#333333" GridLines="None">
                         <AlternatingRowStyle BackColor="White" />
                         <Columns>
@@ -44,8 +45,18 @@
                                 </ItemTemplate>
                             </asp:TemplateField>
                             <asp:BoundField DataField="CreateDate" HeaderText="建立日期" DataFormatString="{0:yyyy-MM-dd}" />
+                            <asp:TemplateField HeaderText="Image">
+                                <ItemTemplate>
+                                    <asp:Image runat="server" ID="imgCover" Width="80" Height="50" Visible="false" />
+                                </ItemTemplate>
+                            </asp:TemplateField>
                             <asp:TemplateField HeaderText="Act">
                                 <ItemTemplate>
+                                   <%-- <asp:Image runat="server" ID="imgCover" Width="80" Height="50"
+                                        Visible='<%# Eval("CoverImage") != null %>'
+                                        ImageUrl='<%# "../FileDownload/Accounting/" + Eval("CoverImage") %>'/>--%>
+                                    <%--<asp:Image runat="server" ID="imgCover" Width="80" Height="50" Visible="false" />--%>
+
                                     <a href="/SystemAdmin/AccountingDetail.aspx?ID=<%# Eval("ID") %>">Edit</a>
                                 </ItemTemplate>
                             </asp:TemplateField>

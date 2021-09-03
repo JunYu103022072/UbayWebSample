@@ -9,6 +9,7 @@ using AccountingNote.DBsourse;
 using System.Drawing;
 using AccountingNote.Auth;
 using AccountingNote.ORM.DBModel;
+using Image = System.Web.UI.WebControls.Image;
 
 namespace AccountingNote.SystemAdmin
 {
@@ -35,6 +36,11 @@ namespace AccountingNote.SystemAdmin
             //Read Accounting Data
             //var dt = AccountingManager.GetAccountingList(currentUser.UserGuid);
             var list = AccountingManager.GetAccountingList(currentUser.ID);
+            int total = AccountingManager.GetTotal();
+
+            this.ltlTotal.Text = $"總計金額 : {total} 元";
+            
+
             //if (dt.Rows.Count > 0)
             //{
             //this.gvAccountList.DataSource = list;
@@ -48,6 +54,8 @@ namespace AccountingNote.SystemAdmin
             //this.gvAccountList.DataSource = dt;
 
             //var pages = (dt.Rows.Count / 10);
+
+
             if (list.Count > 0)
             {
                 var pagedList = this.GetPageDataTable(list);
@@ -131,6 +139,7 @@ namespace AccountingNote.SystemAdmin
             if (row.RowType == DataControlRowType.DataRow)
             {
                 Label lbl = row.FindControl("lblActType") as Label;
+                Image img = row.FindControl("imgCover") as Image;
 
                 //var dr = row.DataItem as DataRowView;
                 //int actType = dr.Row.Field<int>("ActType");
@@ -146,12 +155,17 @@ namespace AccountingNote.SystemAdmin
 
                     lbl.Text = "收入";
                 }
+                if(!string.IsNullOrEmpty(rowData.CoverImage))
+                {
+                    img.Visible = true;
+                    img.ImageUrl = "../FileDownload/Accounting/" + rowData.CoverImage;
+                }
                 if (rowData.Amount > 1500)
                 {
                     lbl.ForeColor = Color.Red;
                 }
             }
         }
-        
+
     }
 }

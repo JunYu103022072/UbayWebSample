@@ -34,7 +34,7 @@ namespace AccountingNote.DBsourse
                 return null;
             }
         }
-        public static UserInfo GetUserInfoByAccount_ORM(string account)
+        public static UserInfor GetUserInfoByAccount_ORM(string account)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace AccountingNote.DBsourse
             }
         }
 
-        public static List<UserInfo> GetUserList_ORM()
+        public static List<UserInfor> GetUserList_ORM()
         {
             try
             {
@@ -96,7 +96,7 @@ namespace AccountingNote.DBsourse
                 return null;
             }
         }
-        public static UserInfo GetUser(Guid ID)
+        public static UserInfor GetUser(Guid ID)
         {
             try
             {
@@ -117,7 +117,7 @@ namespace AccountingNote.DBsourse
                 return null;
             }
         }
-        public static bool UpdateUserInfo(UserInfo userInfo)
+        public static bool UpdateUserInfo(UserInfor userInfo)
         {
             try
             {
@@ -141,7 +141,7 @@ namespace AccountingNote.DBsourse
                 return false;
             }
         }
-        public static bool UpdateUserPassword(UserInfo userInfo)
+        public static bool UpdateUserPassword(UserInfor userInfo)
         {
             try
             {
@@ -162,6 +162,22 @@ namespace AccountingNote.DBsourse
             {
                 Logger.WriteLog(ex);
                 return false;
+            }
+        }
+        public static void CreateUser(UserInfor userinfo)
+        {
+            try
+            {
+                using(ContextModel context = new ContextModel())
+                {
+                    userinfo.Datetime = DateTime.Now;
+                    context.UserInfoes.Add(userinfo);
+                    context.SaveChanges();
+                }
+            }
+            catch(Exception ex)
+            {
+                Logger.WriteLog(ex);
             }
         }
     }
