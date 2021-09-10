@@ -34,7 +34,7 @@ namespace AccountingNote.DBsourse
                 return null;
             }
         }
-        public static UserInfor GetUserInfoByAccount_ORM(string account)
+        public static UserInfo GetUserInfoByAccount_ORM(string account)
         {
             try
             {
@@ -55,6 +55,7 @@ namespace AccountingNote.DBsourse
                 return null;
             }
         }
+
         public static DataTable GetUserList()
         {
             string connectionString = DBHelper.GetConnectionString();
@@ -75,17 +76,15 @@ namespace AccountingNote.DBsourse
                 return null;
             }
         }
-
-        public static List<UserInfor> GetUserList_ORM()
+        /// <summary> 取得用戶列表 </summary>
+        /// <returns></returns>
+        public static List<UserInfo> GetUserList_ORM()
         {
             try
             {
                 using (ContextModel context = new ContextModel())
                 {
-                    var query =
-                        (from item in context.UserInfoes
-                         select item);
-
+                    var query = context.UserInfoes;
                     var list = query.ToList();
                     return list;
                 }
@@ -96,7 +95,7 @@ namespace AccountingNote.DBsourse
                 return null;
             }
         }
-        public static UserInfor GetUser(Guid ID)
+        public static UserInfo GetUser(Guid ID)
         {
             try
             {
@@ -117,15 +116,15 @@ namespace AccountingNote.DBsourse
                 return null;
             }
         }
-        public static bool UpdateUserInfo(UserInfor userInfo)
+        public static bool UpdateUserInfo(UserInfo userInfo)
         {
             try
             {
-                using(ContextModel context = new ContextModel())
+                using (ContextModel context = new ContextModel())
                 {
                     var dbuser = context.UserInfoes.Where(user => user.ID == userInfo.ID).FirstOrDefault();
 
-                    if(dbuser != null)
+                    if (dbuser != null)
                     {
                         dbuser.Name = userInfo.Name;
                         dbuser.Email = userInfo.Email;
@@ -135,13 +134,13 @@ namespace AccountingNote.DBsourse
                     return true;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.WriteLog(ex);
                 return false;
             }
         }
-        public static bool UpdateUserPassword(UserInfor userInfo)
+        public static bool UpdateUserPassword(UserInfo userInfo)
         {
             try
             {
@@ -164,18 +163,18 @@ namespace AccountingNote.DBsourse
                 return false;
             }
         }
-        public static void CreateUser(UserInfor userinfo)
+        public static void CreateUser(UserInfo userinfo)
         {
             try
             {
-                using(ContextModel context = new ContextModel())
+                using (ContextModel context = new ContextModel())
                 {
                     userinfo.Datetime = DateTime.Now;
                     context.UserInfoes.Add(userinfo);
                     context.SaveChanges();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.WriteLog(ex);
             }

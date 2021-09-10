@@ -10,7 +10,7 @@ using System.Web.UI.WebControls;
 
 namespace AccountingNote.SystemAdmin
 {
-    public partial class UserList : System.Web.UI.Page
+    public partial class UserList : AdminPageBass
     {
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -30,6 +30,11 @@ namespace AccountingNote.SystemAdmin
             var userList = UserInfoManager.GetUserList_ORM();
             this.gvUserList.DataSource = userList.ToList();
             this.gvUserList.DataBind();
+
+            //認證授權
+            var list = UserInfoManager.GetUserList_ORM();
+            this.gvList.DataSource = list;
+            this.gvList.DataBind();
         }
 
         protected void gvUserList_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -39,7 +44,7 @@ namespace AccountingNote.SystemAdmin
             if (row.RowType == DataControlRowType.DataRow)
             {
                 Label lbl = row.FindControl("lblUserLevel") as Label;
-                var rowData = row.DataItem as ORM.DBModel.UserInfor;
+                var rowData = row.DataItem as ORM.DBModel.UserInfo;
                 int userLevel = rowData.UserLevel;
                 if( userLevel == 2)
                 {

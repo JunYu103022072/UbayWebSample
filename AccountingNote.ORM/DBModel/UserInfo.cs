@@ -7,8 +7,14 @@ namespace AccountingNote.ORM.DBModel
     using System.Data.Entity.Spatial;
 
     [Table("UserInfo")]
-    public partial class UserInfor
+    public partial class UserInfo
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public UserInfo()
+        {
+            UserRoles = new HashSet<UserRole>();
+        }
+
         public Guid ID { get; set; }
 
         [Required]
@@ -34,5 +40,8 @@ namespace AccountingNote.ORM.DBModel
         [Required]
         [StringLength(20)]
         public string MobilePhone { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserRole> UserRoles { get; set; }
     }
 }

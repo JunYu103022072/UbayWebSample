@@ -53,7 +53,9 @@
     <Compile Include="Class1.cs" />
     <Compile Include="DBModel\Accounting.cs" />
     <Compile Include="DBModel\ContextModel.cs" />
-    <Compile Include="DBModel\UserInfor.cs" />
+    <Compile Include="DBModel\Role.cs" />
+    <Compile Include="DBModel\UserInfo.cs" />
+    <Compile Include="DBModel\UserRole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

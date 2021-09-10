@@ -1,37 +1,30 @@
-﻿using System;
+﻿using AccountingNote.Auth;
+using AccountingNote.DBsourse;
+using AccountingNote.Helper;
+using AccountingNote.Models;
+using AccountingNote.ORM.DBModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using AccountingNote.Auth;
-using AccountingNote.DBsourse;
-using AccountingNote.Extensions;
-using AccountingNote.Helper;
-using AccountingNote.ORM.DBModel;
 
 namespace AccountingNote.SystemAdmin
 {
-    public partial class AccountingDetail : System.Web.UI.Page
+    public partial class AccountingDetail1 : AdminPageBass
     {
+        public override string[] RequiredRoles { get; set; } =
+          new string[]
+          {
+             StaticText.RoleName_Accounting_FinanceAdmin,
+             StaticText.RoleName_Accounting_FinanceClerk,
+          };
         protected void Page_Load(object sender, EventArgs e)
         {
-            //還沒登入的話 導回登入頁
-            if (!AuthManager.Islogined())
-            {
-                Response.Redirect("/Login.aspx");
-                return;
-            }
-            string account = this.Session["UserLoginInfo"] as string;
             //要傳入Accounting的資料,要知道User的ID
             var currentUser = AuthManager.GetCurrentUser();
-            //帳號不存在轉登入頁
-            if (currentUser == null)
-            {
-                this.Session["UserLoginInfo"] = null;
-                return;
-
-            }
+ 
             if (!this.IsPostBack)
             {
                 //檢查URL有沒有帶ID參數
@@ -49,7 +42,7 @@ namespace AccountingNote.SystemAdmin
                     if (int.TryParse(idText, out id))
                     {
                         //多出使用者ID保護資料
-                        var accounting = AccountingManager.GetAccounting(id,currentUser.ID);
+                        var accounting = AccountingManager.GetAccounting(id, currentUser.ID);
 
                         if (accounting == null)
                         {
@@ -118,7 +111,7 @@ namespace AccountingNote.SystemAdmin
 
                 accounting.CoverImage = saveFileName;
             }
-      
+
             if (string.IsNullOrWhiteSpace(idText))
             {
                 //Execute 'Insert Into db'
@@ -182,6 +175,7 @@ namespace AccountingNote.SystemAdmin
             int id;
             if (int.TryParse(idText, out id))
             {
+                //Excute 'delete db'
                 AccountingManager.DeleteAccounting_ORM(id);
             }
             Response.Redirect("/SystemAdmin/AccountingList.aspx");

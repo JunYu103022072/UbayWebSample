@@ -1,37 +1,42 @@
-﻿using System;
+﻿using AccountingNote.Auth;
+using AccountingNote.DBsourse;
+using AccountingNote.Models;
+using AccountingNote.ORM.DBModel;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Data;
-using AccountingNote.DBsourse;
-using System.Drawing;
-using AccountingNote.Auth;
-using AccountingNote.ORM.DBModel;
-using Image = System.Web.UI.WebControls.Image;
 
 namespace AccountingNote.SystemAdmin
 {
-    public partial class AccountingList : System.Web.UI.Page
+    public partial class AccountingList : AdminPageBass
     {
+        public override string[] RequiredRoles { get; set; } =
+            new string[]
+            {
+                StaticText.RoleName_Accounting_FinanceAdmin,
+                StaticText.RoleName_Accounting_FinanceClerk,
+                StaticText.RoleName_Accounting_FinanceReviewer,
+            };
+
         protected void Page_Load(object sender, EventArgs e)
         {
-            //還沒登入的話 導回登入頁
-            if (!AuthManager.Islogined())
-            {
-                Response.Redirect("/Login.aspx");
-                return;
-            }
-            string account = this.Session["UserLoginInfo"] as string;
             //要傳入Accounting的資料,要知道User的ID
             var currentUser = AuthManager.GetCurrentUser();
-            //帳號不存在轉登入頁
-            if (currentUser == null)
+
+            //檢查是否授權
+            if (currentUser.Level == UserLevelEnum.Regular)
             {
-                this.Session["UserLoginInfo"] = null;
-                Response.Redirect("/Login.aspx");
-                return;
+                //if (!this.CanRead())
+                //{
+                //    Response.Redirect("UserInfo.aspx");
+                //    return;
+                //}
+                if (!this.CanEdit())
+                    this.btnCreate.Visible = false;
             }
             //Read Accounting Data
             //var dt = AccountingManager.GetAccountingList(currentUser.UserGuid);
@@ -39,23 +44,9 @@ namespace AccountingNote.SystemAdmin
             int total = AccountingManager.GetTotal();
 
             this.ltlTotal.Text = $"總計金額 : {total} 元";
-            
-
-            //if (dt.Rows.Count > 0)
-            //{
-            //this.gvAccountList.DataSource = list;
-            //this.gvAccountList.DataBind();
-
-            //this.ucPager2.TotalSize = list.Count;
-            //this.ucPager2.Bind();
-
-            //int totalPages = this.GetTotalPages(dt);
-            //var dtPaged = this.GetPageDataTable(list);
-            //this.gvAccountList.DataSource = dt;
-
-            //var pages = (dt.Rows.Count / 10);
 
 
+            //read accouting data
             if (list.Count > 0)
             {
                 var pagedList = this.GetPageDataTable(list);
@@ -69,6 +60,38 @@ namespace AccountingNote.SystemAdmin
                 this.gvAccountList.Visible = false;
                 this.plcNoData.Visible = true;
             }
+        }
+        private bool CanRead()
+        {
+            var currentUser = AuthManager.GetCurrentUser();
+
+            var roles =
+               new string[]
+               {
+                    StaticText.RoleName_Accounting_FinanceClerk,
+                    StaticText.RoleName_Accounting_FinanceAdmin,
+                    StaticText.RoleName_Accounting_FinanceReviewer
+               };
+            if (!AuthManager.IsGrant(currentUser.ID, roles))
+                return true;
+            else
+                return false;
+        }
+        private bool CanEdit()
+        {
+            var currentUser = AuthManager.GetCurrentUser();
+
+            var roles =
+               new string[]
+               {
+                    StaticText.RoleName_Accounting_FinanceClerk,
+                    StaticText.RoleName_Accounting_FinanceAdmin,
+               };
+            if (!AuthManager.IsGrant(currentUser.ID, roles))
+                return true;
+            else
+                return false;
+
         }
         //取頁
         private int GetCurrentPage()
@@ -155,17 +178,16 @@ namespace AccountingNote.SystemAdmin
 
                     lbl.Text = "收入";
                 }
-                if(!string.IsNullOrEmpty(rowData.CoverImage))
+                if (!string.IsNullOrEmpty(rowData.CoverImage))
                 {
                     img.Visible = true;
                     img.ImageUrl = "../FileDownload/Accounting/" + rowData.CoverImage;
                 }
                 if (rowData.Amount > 1500)
                 {
-                    lbl.ForeColor = Color.Red;
+                    lbl.ForeColor = System.Drawing.Color.Red;
                 }
             }
         }
-
     }
 }

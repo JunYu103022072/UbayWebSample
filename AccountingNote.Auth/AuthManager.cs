@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Data;
 using AccountingNote.DBsourse;
+using AccountingNote.ORM.DBModel;
 
 namespace AccountingNote.Auth
 {
@@ -27,7 +28,7 @@ namespace AccountingNote.Auth
         {
             string account = HttpContext.Current.Session["UserLoginInfo"] as string;
             if (account == null)
-            return null;
+                return null;
 
             //有值的狀況下存使用者資訊回傳
             //DataRow dr = UserInfoManager.GetUserInfoByAccount(account);
@@ -46,9 +47,6 @@ namespace AccountingNote.Auth
             model.Email = userInfo.Email;
             model.MobilePhone = userInfo.MobilePhone;
             model.UserLevel = userInfo.UserLevel;
-            model.DateTime = userInfo.Datetime;
-            //model.UserLevel = dr["UserLevel"].ToString();
-            //model.DateTime = dr["Datetime"].ToString();
             return model;
         }
 
@@ -92,6 +90,43 @@ namespace AccountingNote.Auth
                 errorMsg = "Login Fail ! Please check your Account / Password";
                 return false;
             }
+        }
+        /// <summary> 儲存角色對應 </summary>
+        /// <param name="userID"></param>
+        /// <param name="roleIDs"></param>
+        public static void MapUserAndRole(Guid userID, Guid[] roleIDs)
+        {
+            RoleManager.MapUserAndRole(userID, roleIDs);
+        }
+        /// <summary> 是否被授權 </summary>
+        /// <param name="userID"></param>
+        /// <param name="roleIDs"></param>
+        /// <returns></returns>
+        public static bool IsGrant(Guid userID, Guid[] roleIDs)
+        {
+            return RoleManager.IsGrant(userID, roleIDs);
+        }
+        /// <summary> 是否被授權 </summary>
+        /// <param name="userID"></param>
+        /// <param name="roleIDs"></param>
+        /// <returns></returns>
+        public static bool IsGrant(Guid userID, string[] roleNames)
+        {
+            if (roleNames == null)
+                return true;
+
+            List<Guid> roleIDs = new List<Guid>();
+
+            foreach (string roleName in roleNames)
+            {
+                var role = RoleManager.GetRoleByName(roleName);
+
+                if (role == null)
+                    continue;
+                roleIDs.Add(role.ID);
+            }
+
+            return RoleManager.IsGrant(userID, roleIDs.ToArray());
         }
     }
 }

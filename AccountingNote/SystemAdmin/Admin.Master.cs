@@ -10,7 +10,7 @@ namespace AccountingNote.SystemAdmin
 {
     public partial class Admin : System.Web.UI.MasterPage
     {
-        protected void Page_Load(object sender, EventArgs e)
+        protected void Page_Init(object sender, EventArgs e)
         {
             //還沒登入的話 導回登入頁
             if (!AuthManager.Islogined())
@@ -24,6 +24,29 @@ namespace AccountingNote.SystemAdmin
             if (currentUser == null)
             {
                 Response.Redirect("/Login.aspx");
+                return;
+            }
+
+            this.ValidateLevelAndRole(currentUser);
+        }
+        /// <summary> 管理者 / 角色權益請益 </summary>
+        /// <param name="currentUser"></param>
+        private void ValidateLevelAndRole(UserInfoModel currentUser)
+        {
+            if (!(this.Page is AdminPageBass))
+                return;
+
+            var adminPage = (AdminPageBass)this.Page;
+
+            if (adminPage.RequiredLevel == UserLevelEnum.Admin && currentUser.Level != UserLevelEnum.Admin)
+            {
+                Response.Redirect("UserInfo.aspx");
+                return;
+            }
+            if (adminPage.RequiredLevel == UserLevelEnum.Regular &&
+                !AuthManager.IsGrant(currentUser.ID, adminPage.RequiredRoles))
+            {
+                Response.Redirect("UserInfo.aspx");
                 return;
             }
         }

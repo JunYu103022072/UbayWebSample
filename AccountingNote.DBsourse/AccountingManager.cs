@@ -9,39 +9,39 @@ namespace AccountingNote.DBsourse
 {
     public class AccountingManager
     {
+        //public static DataTable GetAccountingList(string userID)
+        //{
+        //    string connectionString = DBHelper.GetConnectionString();
+        //    string dbCommand =
+        //        $@" SELECT
+        //                ID,
+        //                Caption,
+        //                Amount,
+        //                ActType,
+        //                CreateDate
+        //            FROM Accounting
+        //            WHERE UserID = @userID
+        //        ";
+        //    List<SqlParameter> list = new List<SqlParameter>();
+        //    list.Add(new SqlParameter("@userID", userID));
+
+        //    //要把錯誤露出來
+        //    try
+        //    {
+        //        return DBHelper.ReadDataTable(connectionString, dbCommand, list);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Logger.WriteLog(ex);
+        //        return null;
+        //    }
+        //}
+
         /// <summary>
         /// 查詢流水帳清單
         /// </summary>
         /// <param name="userID"></param>
         /// <returns></returns>
-        public static DataTable GetAccountingList(string userID)
-        {
-            string connectionString = DBHelper.GetConnectionString();
-            string dbCommand =
-                $@" SELECT
-                        ID,
-                        Caption,
-                        Amount,
-                        ActType,
-                        CreateDate
-                    FROM Accounting
-                    WHERE UserID = @userID
-                ";
-            List<SqlParameter> list = new List<SqlParameter>();
-            list.Add(new SqlParameter("@userID", userID));
-
-            //要把錯誤露出來
-            try
-            {
-                return DBHelper.ReadDataTable(connectionString, dbCommand, list);
-            }
-            catch (Exception ex)
-            {
-                Logger.WriteLog(ex);
-                return null;
-            }
-        }
-
         public static List<Accounting> GetAccountingList(Guid userID)
         {
             try

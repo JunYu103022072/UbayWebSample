@@ -10,7 +10,7 @@ using System.Web.UI.WebControls;
 
 namespace AccountingNote.SystemAdmin
 {
-    public partial class ChangePassword : System.Web.UI.Page
+    public partial class ChangePassword : AdminPageBass
     {
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -36,7 +36,7 @@ namespace AccountingNote.SystemAdmin
             string inp_PWD2 = this.txtNewPWD2.Text;
             string account = this.Session["UserLoginInfo"] as string;
             var userInfo = UserInfoManager.GetUserInfoByAccount_ORM(account);
-            ORM.DBModel.UserInfor user = new ORM.DBModel.UserInfor()
+            ORM.DBModel.UserInfo user = new ORM.DBModel.UserInfo()
             {
                 PWD = inp_PWD
             };

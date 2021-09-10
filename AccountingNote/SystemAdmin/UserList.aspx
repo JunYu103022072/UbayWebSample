@@ -24,5 +24,15 @@
             </asp:TemplateField>
         </Columns>
     </asp:GridView>
+    <asp:GridView ID="gvList" runat="server" AutoGenerateColumns="False">
+        <Columns>
+            <asp:BoundField DataField="Account" />
+            <asp:TemplateField>
+                <ItemTemplate>
+                    <a href="UserAuth.aspx?ID=<%# Eval("ID") %>">修改權限</a>
+                </ItemTemplate>
+            </asp:TemplateField>
+        </Columns>
+    </asp:GridView>
     <uc1:ucPager runat="server" ID="ucPager" />
 </asp:Content>

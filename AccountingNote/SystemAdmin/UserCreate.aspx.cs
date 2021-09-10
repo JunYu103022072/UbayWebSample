@@ -9,7 +9,7 @@ using System.Web.UI.WebControls;
 
 namespace AccountingNote.SystemAdmin
 {
-    public partial class UserCreate : System.Web.UI.Page
+    public partial class UserCreate : AdminPageBass
     {
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -18,7 +18,7 @@ namespace AccountingNote.SystemAdmin
 
         protected void btnAdd_Click(object sender, EventArgs e)
         {
-            UserInfor userInfo = new UserInfor()
+            ORM.DBModel.UserInfo userInfo = new ORM.DBModel.UserInfo()
             {
                 Account = this.txtAccount.Text,
                 PWD = this.txtPassword.Text,

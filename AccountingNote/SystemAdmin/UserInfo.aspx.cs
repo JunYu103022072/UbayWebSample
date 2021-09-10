@@ -8,7 +8,7 @@ using System.Web.UI.WebControls;
 
 namespace AccountingNote.SystemAdmin
 {
-    public partial class UserInfo : System.Web.UI.Page
+    public partial class UserInfo : AdminPageBass
     {
         protected void Page_Load(object sender, EventArgs e)
         {

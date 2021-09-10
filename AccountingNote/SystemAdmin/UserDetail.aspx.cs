@@ -10,7 +10,7 @@ using System.Web.UI.WebControls;
 
 namespace AccountingNote.SystemAdmin
 {
-    public partial class UserChangeInfo : System.Web.UI.Page
+    public partial class UserChangeInfo : AdminPageBass
     {
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -67,7 +67,7 @@ namespace AccountingNote.SystemAdmin
             }
             //string userID = drUserInfo["ID"].ToString();
 
-            ORM.DBModel.UserInfor user = new ORM.DBModel.UserInfor()
+            ORM.DBModel.UserInfo user = new ORM.DBModel.UserInfo()
             {
                 Name = name,
                 Email = email

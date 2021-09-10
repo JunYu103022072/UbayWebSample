@@ -24,17 +24,14 @@ namespace AccountingNote.Auth
 
         public string MobilePhone { get; set; }
 
-        //public Guid UserGuid        //把ID轉成GUID
-        //{
-        //    get
-        //    {
-        //        return this.ID;
-        //        //if (Guid.TryParse(this.ID, out Guid tempGuid)) 
-        //        //    return tempGuid;
-        //        //else
-        //        //    return Guid.Empty;
-        //    }
-        //}
-
+        #region Custom Property
+        public UserLevelEnum Level
+        {
+            get
+            {
+                return (UserLevelEnum)UserLevel;
+            }
+        }
+        #endregion
     }
 }
